@@ -1,0 +1,167 @@
+import { useState } from "react";
+import { Copy, Clipboard, CheckCircle2, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { TranslationSet } from "../types";
+
+interface SEODetailsProps {
+  t: TranslationSet;
+}
+
+export default function SEODetails({ t }: SEODetailsProps) {
+  // Store expanded FAQ item ID. Default open is the first FAQ (faq1) to match the prototype
+  const [expandedId, setExpandedId] = useState<string | null>("faq1");
+
+  const toggleExpand = (id: string) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
+
+  const steps = [
+    {
+      title: t.tutorialSteps.step1Title,
+      desc: t.tutorialSteps.step1Desc,
+      icon: Copy,
+      color: "from-[#FF4B72] to-[#FF6052]",
+      delay: 0.1,
+    },
+    {
+      title: t.tutorialSteps.step2Title,
+      desc: t.tutorialSteps.step2Desc,
+      icon: Clipboard,
+      color: "from-[#FF6052] to-[#FF7043]",
+      delay: 0.2,
+    },
+    {
+      title: t.tutorialSteps.step3Title,
+      desc: t.tutorialSteps.step3Desc,
+      icon: CheckCircle2,
+      color: "from-[#FF7043] to-[#FF8C3A]",
+      delay: 0.3,
+    },
+  ];
+
+  return (
+    <div id="below-the-fold-seo-details" className="w-full flex flex-col gap-12 mt-4">
+      {/* 1. Tutorial Section */}
+      <section id="how-to-download-section" className="w-full bg-[#F9F9F9] rounded-3xl py-12 px-4 sm:px-6 lg:px-8 mt-4">
+        <div className="max-w-7xl mx-auto text-center">
+          <motion.h2 
+            id="how-to-download-title"
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="font-sans font-extrabold text-2xl md:text-3xl text-[#1A1A1A] mb-12 tracking-tight"
+          >
+            {t.howToDownloadTitle}
+          </motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {steps.map((step, idx) => {
+              const IconComponent = step.icon;
+              return (
+                <motion.div
+                  id={`tutorial-step-card-${idx}`}
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: step.delay }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                  className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col items-center group relative overflow-hidden"
+                >
+                  {/* Decorative subtle background circle */}
+                  <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-[#FF4B72]/5 to-transparent rounded-full z-0 transition-transform duration-500 group-hover:scale-150" />
+                  
+                  <div 
+                    id={`step-icon-bg-${idx}`}
+                    className={`relative z-10 w-16 h-16 rounded-2xl bg-gradient-to-br ${step.color} p-4 flex items-center justify-center mb-6 text-white shadow-md transform transition-transform group-hover:scale-110 duration-300`}
+                  >
+                    <IconComponent className="w-8 h-8" />
+                  </div>
+                  <h3 className="relative z-10 font-sans font-bold text-xl text-[#1A1A1A] mb-3">
+                    <span className="text-[#FF4B72] mr-2">0{idx + 1}.</span>{step.title}
+                  </h3>
+                  <p className="relative z-10 font-sans font-normal text-base text-gray-500 leading-relaxed max-w-[260px]">
+                    {step.desc}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Divider line */}
+      <hr className="w-full border-gray-100 max-w-4xl mx-auto" />
+
+      {/* 2. FAQ Accordion Section */}
+      <section id="faq-section" className="w-full max-w-2xl mx-auto px-4">
+        <motion.h2 
+          id="faq-section-title"
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="font-sans font-extrabold text-2xl md:text-3xl text-[#1A1A1A] mb-8 text-center tracking-tight"
+        >
+          {t.faqTitle}
+        </motion.h2>
+
+        <div className="space-y-4">
+          {t.faqs.map((item, idx) => {
+            const isExpanded = expandedId === item.id;
+            return (
+              <motion.div
+                id={`faq-item-card-${item.id}`}
+                key={item.id}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                className={`rounded-2xl border transition-all duration-300 overflow-hidden bg-white ${
+                  isExpanded 
+                    ? "border-[#FF4B72]/30 shadow-[0_8px_24px_rgba(255,75,114,0.04)]" 
+                    : "border-gray-100 hover:border-gray-200 shadow-sm"
+                }`}
+              >
+                <button
+                  id={`faq-trigger-${item.id}`}
+                  onClick={() => toggleExpand(item.id)}
+                  className="w-full px-6 py-4 min-h-[64px] flex justify-between items-center text-left gap-4 font-sans focus:outline-none transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <HelpCircle className={`w-5 h-5 shrink-0 transition-colors ${isExpanded ? "text-[#FF4B72]" : "text-gray-400"}`} />
+                    <span className={`font-bold text-sm md:text-base leading-tight transition-colors duration-200 ${
+                      isExpanded ? "text-[#FF4B72]" : "text-[#1A1A1A]"
+                    }`}>
+                      {item.question}
+                    </span>
+                  </div>
+                  <div className={`p-1.5 rounded-full shrink-0 transition-colors ${isExpanded ? "bg-[#FF4B72]/10 text-[#FF4B72]" : "bg-[#F9F9F9] text-gray-500"}`}>
+                    {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isExpanded && (
+                    <motion.div
+                      id={`faq-content-pane-${item.id}`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25, ease: "easeInOut" }}
+                    >
+                      <div className="px-6 pb-5 pt-1 text-gray-600 font-sans text-sm md:text-base leading-relaxed border-t border-gray-50">
+                        {item.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -1,0 +1,6 @@
+{
+  "name": "SaveTok",
+  "description": "Fast, free, and unlimited TikTok video downloader without watermarks directly to your device.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
