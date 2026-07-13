@@ -96,9 +96,51 @@ export default function SEODetails({ t }: SEODetailsProps) {
 
       {/* SEO Marketing Text Area - Styled to mimic SSSTik's informative sections but cleaner */}
       <section className="w-full max-w-4xl mx-auto px-4 md:px-8 text-[#1A1A1A]">
-        <div className="flex flex-col gap-8 text-center md:text-left">
+        <div className="flex flex-col gap-10 text-center md:text-left">
           
-          <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+          <div className="flex flex-col gap-4 items-center md:items-start text-center md:text-left">
+            <h2 className="font-sans font-bold text-2xl md:text-3xl tracking-tight text-[#1A1A1A]">
+              Download video TikTok mp4 dengan gratis!
+            </h2>
+            <p className="font-sans text-gray-600 leading-relaxed text-sm md:text-base max-w-3xl">
+              SSS TikTok download mp4 adalah salah satu alat paling populer untuk <strong>unduh TikTok mp4 online gratis</strong> dan <strong>hapus watermark tiktok online</strong>. Tidak perlu menggunakan aplikasi tambahan untuk menggunakan layanan kami, yang kamu butuhkan hanya browser dan tautan untuk ditempelkan pada halaman utama.
+            </p>
+          </div>
+
+          <div className="bg-[#F9F9F9] rounded-3xl p-8 md:p-10 border border-gray-100 flex flex-col md:flex-row gap-8 items-center">
+            <div className="flex-1 flex flex-col gap-4">
+              <h3 className="font-sans font-bold text-xl md:text-2xl text-[#1A1A1A]">Unduh Video TikTok: Solusi Ideal Untuk Mengunggah Ulang Konten Online</h3>
+              <ul className="flex flex-col gap-3 font-sans text-gray-600 text-sm md:text-base">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#FF4B72] shrink-0 mt-0.5" />
+                  <span>Kamu bisa download tiktok sebanyak yang kamu mau.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#FF4B72] shrink-0 mt-0.5" />
+                  <span>Buka situs Download Tik Tok kami, tempelkan tautan video yang Anda inginkan, dan mulai mengunduh secara instan.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#FF4B72] shrink-0 mt-0.5" />
+                  <span>Save from TikTok dengan kecepatan tinggi tanpa aplikasi.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-[#FF4B72] shrink-0 mt-0.5" />
+                  <span>Pengunduh TikTok yang Kompatibel dengan Semua Browser dan Sistem Operasi.</span>
+                </li>
+              </ul>
+            </div>
+            {/* Visual element placeholder matching SSSTik's layout block */}
+            <div className="w-full md:w-[40%] bg-gradient-to-br from-[#FF4B72]/10 to-[#FF7043]/10 rounded-2xl aspect-square flex items-center justify-center p-6 border border-[#FF4B72]/20 shadow-sm relative overflow-hidden">
+                <div className="absolute inset-0 bg-white/40 backdrop-blur-sm z-0"></div>
+                <div className="relative z-10 w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-lg">
+                  <svg className="w-10 h-10 text-[#FF4B72]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                  </svg>
+                </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-8 items-center md:items-start mt-4">
             <div className="flex-1 flex flex-col gap-3">
               <h2 className="font-sans font-bold text-xl md:text-2xl tracking-tight">Unduh Video TikTok Tanpa Watermark HD</h2>
               <p className="font-sans text-gray-600 leading-relaxed text-sm md:text-base">
