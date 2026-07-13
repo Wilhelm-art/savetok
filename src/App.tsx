@@ -61,6 +61,11 @@ export default function App() {
     setVideoResult(null);
 
     try {
+      // Auto-scroll to the loading skeleton state immediately so the user knows something is happening
+      setTimeout(() => {
+        document.getElementById("dynamic-content-state-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
+
       // Use RapidAPI TikTok Video No Watermark endpoint for 100% reliable fetching
       const response = await fetch(`https://tiktok-video-no-watermark2.p.rapidapi.com/?url=${encodeURIComponent(urlInput)}`, {
         method: "GET",
