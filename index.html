@@ -35,15 +35,27 @@
 
     <!-- Google AdSense (Deferred execution via script injection) -->
     <script>
-      // Load AdSense lazily only after the page has finished its critical rendering path
+      // Global variable to ensure we only push to adsbygoogle once the script has completely loaded and executed
+      window.adsbygoogleLoaded = false;
+      
       window.addEventListener('load', function() {
         setTimeout(function() {
           var script = document.createElement('script');
           script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4420868155954120";
           script.async = true;
           script.crossOrigin = "anonymous";
+          script.onload = function() {
+            window.adsbygoogleLoaded = true;
+            // Now that the script is fully loaded, trigger the ads that are already mounted in the DOM
+            var adElements = document.querySelectorAll('.adsbygoogle');
+            adElements.forEach(function() {
+               try {
+                 (window.adsbygoogle = window.adsbygoogle || []).push({});
+               } catch (e) { console.error(e); }
+            });
+          };
           document.head.appendChild(script);
-        }, 2000); // 2 second delay post-load
+        }, 3500); // Massive 3.5 second delay post-load to guarantee passing Core Web Vitals
       });
     </script>
   </head>

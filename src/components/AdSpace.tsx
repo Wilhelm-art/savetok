@@ -13,7 +13,9 @@ function AdSenseBlock({ className = "", format = "horizontal", style = {} }: { c
   const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "200px 0px" });
 
   useEffect(() => {
-    if (inView) {
+    // Only push if the script has actually loaded and this component is in view
+    // @ts-ignore
+    if (inView && window.adsbygoogleLoaded) {
       try {
         // @ts-ignore
         (window.adsbygoogle = window.adsbygoogle || []).push({});
