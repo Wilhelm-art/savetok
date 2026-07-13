@@ -1,20 +1,40 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# SaveTok - TikTok Video Downloader
 
-# Run and deploy your AI Studio app
+SaveTok is a modern, responsive web application that allows users to download TikTok videos as MP4 or MP3 files without watermarks. Built for speed and simplicity, it features localization support and a clean UI tailored for both desktop and mobile users.
 
-This contains everything you need to run your app locally.
+## Features
+- **Download MP4 & MP3**: Fetch TikTok videos instantly without watermarks or extract high-quality audio.
+- **Multilingual UI**: Native support for Indonesian, English, and Spanish.
+- **Stateless & Private**: No login required. Downloads happen directly via API; nothing is permanently stored on our servers.
+- **Responsive Design**: Clean UI/UX optimized seamlessly for all devices.
+- **SEO & Tracking Ready**: Integrated with Google Tag Manager for reliable analytics.
 
-View your app in AI Studio: https://ai.studio/apps/1385c91d-633f-4efe-8836-9ade97a7e16a
+## Quick Start
 
-## Run Locally
+**Prerequisites:**  
+- Node.js (v18+)
+- npm or yarn
 
-**Prerequisites:**  Node.js
+1. Clone the repository and install dependencies:
+   ```bash
+   npm install
+   ```
 
+2. Run the application locally in development mode:
+   ```bash
+   npm run dev
+   ```
+   The server will start at `http://localhost:3000`.
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+3. To build for production:
+   ```bash
+   npm run build
+   ```
+
+## Tech Stack
+- **Frontend**: React (Vite), Tailwind CSS v4, TypeScript
+- **Backend / API Wrapper**: Express.js
+- **Metadata Handling**: Schema.org JSON-LD for SEO
+
+## Disclaimer
+SaveTok is not affiliated with, endorsed by, or sponsored by TikTok, ByteDance, or any of their affiliates. The app relies on publicly available third-party data APIs.
