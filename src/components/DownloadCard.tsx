@@ -11,46 +11,12 @@ interface DownloadCardProps {
 }
 
 export default function DownloadCard({ result, t, onReset }: DownloadCardProps) {
-  // Safe helper to trigger standard browser file downloads through our Express proxy or direct blob fetch
-  const handleDownload = async (downloadUrl: string, extension: string) => {
-    // Show user some immediate feedback since fetching huge videos takes a couple seconds
-    const btnId = extension === 'mp4' ? 'btn-download-mp4' : 'btn-download-mp3';
-    const btn = document.getElementById(btnId);
-    const originalText = btn?.querySelector('span')?.innerText;
-    if (btn) {
-      btn.classList.add('opacity-70', 'pointer-events-none');
-      const span = btn.querySelector('span');
-      if (span) span.innerText = 'Downloading...';
-    }
-
-    try {
-      // Create a temporary anchor tag to force download rather than navigation
-      const response = await fetch(downloadUrl);
-      if (!response.ok) throw new Error("Network response was not ok");
-      
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      // Provide a clean filename based on the TikTok ID
-      a.download = `SaveTok_video_${result.id}.${extension}`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error("Download failed, falling back to direct navigation:", err);
-      // Fallback: If CORS blocks the fetch, open it directly in a new tab where standard browser media players handle it
-      window.open(downloadUrl, "_blank");
-    } finally {
-      // Restore button state
-      if (btn) {
-        btn.classList.remove('opacity-70', 'pointer-events-none');
-        const span = btn.querySelector('span');
-        if (span && originalText) span.innerText = originalText;
-      }
-    }
+  // Safe helper to trigger standard browser file downloads or new tab routing
+  const handleDownload = (downloadUrl: string, extension: string) => {
+    // If the user is on mobile (or if TikTok strictly forces a stream), the best SSSTik-style 
+    // pattern is to simply push the URL directly to the browser window.
+    // Modern mobile browsers handle this much better than blob fetching, which can crash low-memory devices.
+    window.open(downloadUrl, "_blank");
   };
 
   return (
