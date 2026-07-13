@@ -61,25 +61,36 @@ export default function App() {
     setVideoResult(null);
 
     try {
-      const response = await fetch("/api/process", {
-        method: "POST",
+      // Use tikwm.com API which actually works for download scraping
+      const response = await fetch("https://www.tikwm.com/api/?url=" + encodeURIComponent(urlInput) + "&hd=1", {
+        method: "GET",
         headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url: urlInput }),
+          "Accept": "application/json"
+        }
       });
 
       const data = await response.json();
 
-      if (!response.ok) {
-        setValidationError(data.error || t.errorInvalid);
+      if (!response.ok || data.code !== 0) {
+        setValidationError(data.msg || data.error || t.errorInvalid);
         setStatus("error");
         return;
       }
 
       // Success payload received
-      setVideoResult(data);
+      const tikData = data.data;
+      setVideoResult({
+        id: tikData.id,
+        title: tikData.title,
+        authorName: tikData.author?.nickname || "tiktok_creator",
+        authorUrl: "https://www.tiktok.com",
+        thumbnailUrl: tikData.cover,
+        duration: tikData.duration ? Math.floor(tikData.duration / 60) + ":" + (tikData.duration % 60).toString().padStart(2, '0') : "00:00",
+        downloadMp4: "https://www.tikwm.com" + (tikData.hdplay || tikData.play),
+        downloadMp3: "https://www.tikwm.com" + tikData.music
+      });
       setStatus("success");
+      
     } catch (err) {
       console.error("Express processing failed:", err);
       setValidationError(t.errorServer);
