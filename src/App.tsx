@@ -93,6 +93,11 @@ export default function App() {
       });
       setStatus("success");
       
+      // Auto-scroll to the result card so mobile users see the download buttons immediately
+      setTimeout(() => {
+        document.getElementById("dynamic-content-state-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+      
     } catch (err) {
       console.error("Express processing failed:", err);
       setValidationError(t.errorServer);
