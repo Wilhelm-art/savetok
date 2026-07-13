@@ -11,9 +11,28 @@ interface DownloadCardProps {
 }
 
 export default function DownloadCard({ result, t, onReset }: DownloadCardProps) {
-  // Safe helper to trigger standard browser file downloads through our Express proxy
-  const handleDownload = (downloadUrl: string) => {
-    window.location.href = downloadUrl;
+  // Safe helper to trigger standard browser file downloads through our Express proxy or direct blob fetch
+  const handleDownload = async (downloadUrl: string, extension: string) => {
+    try {
+      // Create a temporary anchor tag to force download rather than navigation
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error("Network response was not ok");
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      // Provide a clean filename based on the TikTok ID
+      a.download = `SaveTok_video_${result.id}.${extension}`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error("Download failed, falling back to direct navigation:", err);
+      window.open(downloadUrl, "_blank");
+    }
   };
 
   return (
@@ -102,7 +121,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
             {/* Primary Download (MP4) */}
             <button
               id="btn-download-mp4"
-              onClick={() => handleDownload(result.downloadMp4)}
+              onClick={() => handleDownload(result.downloadMp4, "mp4")}
               className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-gradient-to-r from-[#FF4B72] to-[#FF7043] text-white font-sans font-bold text-sm tracking-wide shadow-md hover:opacity-95 active:scale-98 transition-all cursor-pointer"
             >
               <Film className="w-4.5 h-4.5" />
@@ -112,7 +131,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
             {/* Secondary Download (MP3) */}
             <button
               id="btn-download-mp3"
-              onClick={() => handleDownload(result.downloadMp3)}
+              onClick={() => handleDownload(result.downloadMp3, "mp3")}
               className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl border-2 border-[#FF4B72] text-[#FF4B72] font-sans font-bold text-sm tracking-wide bg-transparent hover:bg-[#FF4B72]/5 active:scale-98 transition-all cursor-pointer"
             >
               <Music className="w-4.5 h-4.5" />
