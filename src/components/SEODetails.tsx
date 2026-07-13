@@ -55,7 +55,7 @@ export default function SEODetails({ t }: SEODetailsProps) {
             {t.howToDownloadTitle}
           </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {steps.map((step, idx) => {
               const IconComponent = step.icon;
               return (
@@ -88,6 +88,41 @@ export default function SEODetails({ t }: SEODetailsProps) {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Divider line */}
+      <hr className="w-full border-gray-100 max-w-4xl mx-auto" />
+
+      {/* SEO Marketing Text Area - Styled to mimic SSSTik's informative sections but cleaner */}
+      <section className="w-full max-w-4xl mx-auto px-4 md:px-8 text-[#1A1A1A]">
+        <div className="flex flex-col gap-8 text-center md:text-left">
+          
+          <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+            <div className="flex-1 flex flex-col gap-3">
+              <h2 className="font-sans font-bold text-xl md:text-2xl tracking-tight">Unduh Video TikTok Tanpa Watermark HD</h2>
+              <p className="font-sans text-gray-600 leading-relaxed text-sm md:text-base">
+                Di <strong>SaveTok</strong>, kami menawarkan layanan gratis untuk unduh video TikTok tanpa watermark. Dapatkan video dengan resolusi HD dalam format MP4, dan ikuti petunjuk mudah kami untuk menggunakan pengunduh tiktok video.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+            <div className="bg-[#F9F9F9] p-6 rounded-2xl shadow-sm border border-gray-100 text-left">
+              <h3 className="font-sans font-bold text-lg mb-2 text-[#FF4B72]">Akses Tanpa Batas</h3>
+              <p className="font-sans text-gray-500 text-sm leading-relaxed">
+                Nikmati kebebasan untuk download video tiktok no watermark sebanyak yang Anda inginkan, tanpa ada batasan unduhan sama sekali.
+              </p>
+            </div>
+            
+            <div className="bg-[#F9F9F9] p-6 rounded-2xl shadow-sm border border-gray-100 text-left">
+              <h3 className="font-sans font-bold text-lg mb-2 text-[#FF7043]">MP4 dan MP3 Dalam HD</h3>
+              <p className="font-sans text-gray-500 text-sm leading-relaxed">
+                Save from TikTok dengan kecepatan tinggi tanpa aplikasi. Tersedia dalam format MP4 HD atau konversi langsung ke audio MP3.
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 

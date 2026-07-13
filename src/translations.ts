@@ -35,18 +35,33 @@ export const translations: TranslationsMap = {
     faqs: [
       {
         id: "faq1",
-        question: "Apakah gratis menggunakan SaveTok?",
-        answer: "Ya! SaveTok sepenuhnya gratis untuk digunakan mengunduh video dan audio TikTok tanpa batasan jumlah unduhan atau biaya tersembunyi."
+        question: "Apakah aplikasi TikTok video download gratis?",
+        answer: "Ya! SaveTok sepenuhnya gratis untuk digunakan mengunduh video dan audio TikTok tanpa batasan jumlah unduhan atau biaya tersembunyi. Kami berusaha menyajikan layanan TikTok download mp4 online gratis."
       },
       {
         id: "faq2",
-        question: "Di mana file yang diunduh disimpan?",
-        answer: "File Anda yang diunduh akan otomatis tersimpan di folder 'Unduhan' bawaan perangkat Anda, kecuali Anda telah mengubah pengaturan direktori default pada browser Anda."
+        question: "Bagaimana cara hapus watermark tiktok online?",
+        answer: "Kamu hanya perlu menyalin tautan video dari aplikasi TikTok, menempelkannya ke kotak di bagian atas halaman ini, lalu klik Download. Server kami akan otomatis menghapus watermark dari video."
       },
       {
         id: "faq3",
-        question: "Apakah saya perlu menginstal perangkat lunak?",
-        answer: "Tidak, Anda tidak perlu menginstal perangkat lunak, aplikasi, atau ekstensi browser apa pun. SaveTok berfungsi penuh secara instan langsung di browser web Anda."
+        question: "Di mana kamu download video TikTok tanpa watermark disimpan?",
+        answer: "File Anda yang diunduh akan otomatis tersimpan di folder 'Unduhan' atau 'Downloads' bawaan perangkat Anda, baik di PC (Windows/Mac) maupun ponsel (Android/iOS)."
+      },
+      {
+        id: "faq4",
+        question: "Apakah saya perlu menginstal ekstensi untuk save from TikTok?",
+        answer: "Tidak, Anda tidak perlu menginstal perangkat lunak, aplikasi, atau ekstensi browser apa pun. SaveTok berfungsi penuh secara instan langsung di browser web PC maupun ponsel Android/iOS Anda."
+      },
+      {
+        id: "faq5",
+        question: "Bisakah saya tiktok download no wm dalam HD?",
+        answer: "Tentu saja! SaveTok selalu berusaha memberikan kualitas tertinggi (HD) sesuai dengan resolusi asli video yang diunggah ke server TikTok."
+      },
+      {
+        id: "faq6",
+        question: "Bagaimana cara download video TT di iPhone (iOS)?",
+        answer: "Untuk pengguna iPhone (iOS 13+), kamu dapat mengunduh langsung menggunakan browser Safari. Cukup salin tautan, tempel di SaveTok, tekan unduh, lalu file akan masuk ke manajer unduhan Safari kamu."
       }
     ]
   },
