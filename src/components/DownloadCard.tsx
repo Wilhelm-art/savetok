@@ -13,6 +13,16 @@ interface DownloadCardProps {
 export default function DownloadCard({ result, t, onReset }: DownloadCardProps) {
   // Safe helper to trigger standard browser file downloads through our Express proxy or direct blob fetch
   const handleDownload = async (downloadUrl: string, extension: string) => {
+    // Show user some immediate feedback since fetching huge videos takes a couple seconds
+    const btnId = extension === 'mp4' ? 'btn-download-mp4' : 'btn-download-mp3';
+    const btn = document.getElementById(btnId);
+    const originalText = btn?.querySelector('span')?.innerText;
+    if (btn) {
+      btn.classList.add('opacity-70', 'pointer-events-none');
+      const span = btn.querySelector('span');
+      if (span) span.innerText = 'Downloading...';
+    }
+
     try {
       // Create a temporary anchor tag to force download rather than navigation
       const response = await fetch(downloadUrl);
@@ -31,7 +41,15 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
       document.body.removeChild(a);
     } catch (err) {
       console.error("Download failed, falling back to direct navigation:", err);
+      // Fallback: If CORS blocks the fetch, open it directly in a new tab where standard browser media players handle it
       window.open(downloadUrl, "_blank");
+    } finally {
+      // Restore button state
+      if (btn) {
+        btn.classList.remove('opacity-70', 'pointer-events-none');
+        const span = btn.querySelector('span');
+        if (span && originalText) span.innerText = originalText;
+      }
     }
   };
 
