@@ -11,18 +11,20 @@ interface DownloadCardProps {
 }
 
 export default function DownloadCard({ result, t, onReset }: DownloadCardProps) {
-  // Safe helper to trigger standard browser file downloads or new tab routing
+  // Safe helper to trigger standard browser file downloads without opening new tabs
   const handleDownload = (downloadUrl: string, extension: string) => {
-    // We create a temporary hidden anchor element to force the browser to respect the `download` attribute.
-    // This allows the file to be downloaded directly to the device rather than just opening in a new tab if supported.
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    // Add the download attribute which hints to the browser that this should be saved to disk
-    a.download = `SaveTok_video_${result.id}.${extension}`;
-    // Specifically request it to open in a new tab/window if the browser insists on streaming it
-    a.target = "_blank";
+    // Instead of forcing a new tab, we pass the TikTok CDN link to our own backend API proxy
+    // Our Vercel backend will fetch the video and instantly stream it down to the user 
+    // as an attachment, forcing a native, direct download right on this page!
+    const proxyUrl = `/api/download?url=${encodeURIComponent(downloadUrl)}`;
     
-    // Append, click, and cleanup
+    // Create temporary link pointing to our proxy
+    const a = document.createElement("a");
+    a.href = proxyUrl;
+    // Tell browser this is a download
+    a.download = `SaveTok_video_${result.id}.${extension}`;
+    
+    // Trigger direct download and remove
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
