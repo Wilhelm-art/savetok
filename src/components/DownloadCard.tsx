@@ -13,10 +13,19 @@ interface DownloadCardProps {
 export default function DownloadCard({ result, t, onReset }: DownloadCardProps) {
   // Safe helper to trigger standard browser file downloads or new tab routing
   const handleDownload = (downloadUrl: string, extension: string) => {
-    // If the user is on mobile (or if TikTok strictly forces a stream), the best SSSTik-style 
-    // pattern is to simply push the URL directly to the browser window.
-    // Modern mobile browsers handle this much better than blob fetching, which can crash low-memory devices.
-    window.open(downloadUrl, "_blank");
+    // We create a temporary hidden anchor element to force the browser to respect the `download` attribute.
+    // This allows the file to be downloaded directly to the device rather than just opening in a new tab if supported.
+    const a = document.createElement("a");
+    a.href = downloadUrl;
+    // Add the download attribute which hints to the browser that this should be saved to disk
+    a.download = `SaveTok_video_${result.id}.${extension}`;
+    // Specifically request it to open in a new tab/window if the browser insists on streaming it
+    a.target = "_blank";
+    
+    // Append, click, and cleanup
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
