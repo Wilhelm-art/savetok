@@ -13,35 +13,11 @@ export default defineConfig(() => {
     },
     build: {
       cssMinify: true,
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true
-        }
-      },
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes('node_modules')) {
-              // Split vendor chunks drastically for mobile CPU parse times
-              if (id.includes('react') || id.includes('react-dom')) {
-                return 'vendor-react';
-              }
-              if (id.includes('motion')) {
-                return 'vendor-motion';
-              }
-              if (id.includes('lucide')) {
-                return 'vendor-icons';
-              }
-              return 'vendor-core';
-            }
-          }
-        }
-      }
+      minify: 'esbuild' as const,
+      // Totally remove custom rollup manualChunks to rely on Vite's default 
+      // battle-tested chunker and avoid circular module execution panics
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
       hmr: process.env.DISABLE_HMR !== 'true',
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
