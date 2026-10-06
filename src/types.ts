@@ -13,6 +13,8 @@ export interface MediaResult {
   downloadMp4?: string;
   downloadMp3?: string;
   images?: string[];
+  musicTitle?: string;
+  musicAuthor?: string;
 }
 
 export interface FAQItem {

@@ -1,4 +1,36 @@
+const downloadIpRateMap = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const MAX_DOWNLOAD_REQUESTS_PER_MIN = 60;
+
+function checkDownloadRateLimit(ip) {
+  const now = Date.now();
+  if (downloadIpRateMap.size > 5000) {
+    for (const [k, v] of downloadIpRateMap.entries()) {
+      if (now > v.resetAt) downloadIpRateMap.delete(k);
+    }
+  }
+
+  const record = downloadIpRateMap.get(ip) || { count: 0, resetAt: now + RATE_LIMIT_WINDOW };
+  if (now > record.resetAt) {
+    record.count = 1;
+    record.resetAt = now + RATE_LIMIT_WINDOW;
+    downloadIpRateMap.set(ip, record);
+    return true;
+  }
+  if (record.count >= MAX_DOWNLOAD_REQUESTS_PER_MIN) {
+    return false;
+  }
+  record.count++;
+  downloadIpRateMap.set(ip, record);
+  return true;
+}
+
 export default async function handler(req, res) {
+  const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
+  if (!checkDownloadRateLimit(clientIp)) {
+    return res.status(429).json({ error: 'Terlalu banyak permintaan unduhan. Silakan tunggu 1 menit.' });
+  }
+
   const rawUrl = req.query.url;
   const requestedType = req.query.type; // 'video' | 'photo' | 'audio'
   const customId = req.query.id;
@@ -36,13 +68,19 @@ export default async function handler(req, res) {
       prefix = 'photo';
     }
 
-    // Fetch the raw media from TikTok's CDN
+    // Fetch the raw media from TikTok's CDN with 15s timeout
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
     const response = await fetch(rawUrl, {
+      signal: controller.signal,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Referer': 'https://www.tiktok.com/',
       }
     });
+
+    clearTimeout(timeout);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch media from CDN: ${response.statusText}`);

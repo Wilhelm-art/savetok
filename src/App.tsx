@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, Music, Sparkles, Eye } from "lucide-react";
+import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, Music, Sparkles, Eye, Clock, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import Header from "./components/Header";
-import { TopBannerAd } from "./components/AdSpace";
+import { TopBannerAd, MobileStickyAnchorAd } from "./components/AdSpace";
 import SEODetails from "./components/SEODetails";
 import GuidesSection from "./components/GuidesSection";
 import ProcessingSkeleton from "./components/ProcessingSkeleton";
@@ -179,11 +179,115 @@ export default function App() {
 
   const routeHero = getRouteHero(currentRoute, language, t);
 
+  // 3B. Dynamic OpenGraph, Twitter, and Document Title Routing
+  useEffect(() => {
+    const routeTitles: Record<string, { id: string; en: string; descId: string; descEn: string }> = {
+      "/": {
+        id: "SaveTok - Download Video TikTok Tanpa Watermark HD Cepat & Gratis",
+        en: "SaveTok - Download TikTok Video Without Watermark HD Fast & Free",
+        descId: "Download video TikTok tanpa watermark kualitas Full HD 1080p, slide foto carousel, dan audio MP3 cepat tanpa login.",
+        descEn: "Download TikTok videos without watermark in Full HD 1080p, photo carousel slides, and MP3 audio fast without login."
+      },
+      "/mp3": {
+        id: "Download Lagu & Sound TikTok MP3 320kbps - SaveTok",
+        en: "Download TikTok MP3 Audio & Sound 320kbps - SaveTok",
+        descId: "Ekstrak dan simpan audio lagu viral TikTok ke format MP3 320kbps jernih tanpa watermark.",
+        descEn: "Extract and convert TikTok viral sounds and background music to high-quality 320kbps MP3 audio."
+      },
+      "/foto": {
+        id: "Download Foto Slide TikTok HD & ZIP Sekaligus - SaveTok",
+        en: "Download TikTok Photo Slides HD & ZIP Archive - SaveTok",
+        descId: "Unduh semua foto slide carousel TikTok kualitas asli tanpa watermark dalam satu paket ZIP.",
+        descEn: "Save all TikTok photo carousel slides in original HD resolution with one-click ZIP download."
+      },
+      "/story": {
+        id: "Download Story TikTok Tanpa Watermark HD - SaveTok",
+        en: "Download TikTok Story Without Watermark HD - SaveTok",
+        descId: "Simpan story TikTok favorit sebelum kedaluwarsa 24 jam dengan kualitas video HD jernih.",
+        descEn: "Save temporary TikTok stories in original HD quality before they expire after 24 hours."
+      },
+      "/viewer": {
+        id: "TikTok Web Viewer Tanpa Login Gratis - SaveTok",
+        en: "TikTok Web Viewer Without Login Free - SaveTok",
+        descId: "Jelajahi video dan profil TikTok secara anonim langsung di web browser tanpa login akun.",
+        descEn: "Browse public TikTok creator profiles and videos anonymously directly in browser without an account."
+      },
+      "/panduan": {
+        id: "Panduan Lengkap Cara Download Video TikTok - SaveTok",
+        en: "Complete Guide How to Download TikTok Videos - SaveTok",
+        descId: "Tutorial lengkap cara menyimpan video, foto slide, dan lagu TikTok tanpa watermark di Android, iPhone, dan PC.",
+        descEn: "Complete tutorial on downloading TikTok videos, photo slides, and audio without watermark on all devices."
+      }
+    };
+
+    const norm = currentRoute.replace(/\/+$/, "") || "/";
+    const meta = routeTitles[norm] || routeTitles["/"];
+    const pageTitle = language === "ID" ? meta.id : meta.en;
+    const pageDesc = language === "ID" ? meta.descId : meta.descEn;
+
+    document.title = pageTitle;
+
+    const ogTitleMeta = document.querySelector('meta[property="og:title"]');
+    if (ogTitleMeta) ogTitleMeta.setAttribute("content", pageTitle);
+    const twTitleMeta = document.querySelector('meta[name="twitter:title"]');
+    if (twTitleMeta) twTitleMeta.setAttribute("content", pageTitle);
+
+    const descMeta = document.querySelector('meta[name="description"]');
+    if (descMeta) descMeta.setAttribute("content", pageDesc);
+    const ogDescMeta = document.querySelector('meta[property="og:description"]');
+    if (ogDescMeta) ogDescMeta.setAttribute("content", pageDesc);
+    const twDescMeta = document.querySelector('meta[name="twitter:description"]');
+    if (twDescMeta) twDescMeta.setAttribute("content", pageDesc);
+  }, [currentRoute, language]);
+
   // 2. Interactive Input States
   const [urlInput, setUrlInput] = useState("");
   const [status, setStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
   const [validationError, setValidationError] = useState<string | null>(null);
   const [videoResult, setVideoResult] = useState<MediaResult | null>(null);
+  const [showPasteToast, setShowPasteToast] = useState(false);
+
+  // 5A. Local Recent History State (Max 5 items, privacy-safe on device only)
+  const [recentHistory, setRecentHistory] = useState<MediaResult[]>(() => {
+    try {
+      const saved = localStorage.getItem("savetok_recent_history");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const saveToHistory = (item: MediaResult) => {
+    try {
+      setRecentHistory((prev) => {
+        const filtered = prev.filter((h) => h.id !== item.id);
+        const updated = [item, ...filtered].slice(0, 5);
+        localStorage.setItem("savetok_recent_history", JSON.stringify(updated));
+        return updated;
+      });
+    } catch (e) {
+      console.warn("Failed saving history", e);
+    }
+  };
+
+  const clearHistory = () => {
+    setRecentHistory([]);
+    try {
+      localStorage.removeItem("savetok_recent_history");
+    } catch {}
+  };
+
+  // 5C. Global Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        document.getElementById("tiktok-url-input")?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // 3. Legal Modals states
   const [activeLegal, setActiveLegal] = useState<"privacy" | "terms" | "disclaimer" | null>(null);
@@ -207,13 +311,15 @@ export default function App() {
     }
   }, [urlInput]);
 
-  // Handle Clipboard access to automatically paste URL links securely
+  // Handle Clipboard access to automatically paste URL links securely (5B micro-toast)
   const handlePaste = async () => {
     try {
       const clipboardText = await navigator.clipboard.readText();
       if (clipboardText) {
         setUrlInput(clipboardText);
         setValidationError(null);
+        setShowPasteToast(true);
+        setTimeout(() => setShowPasteToast(false), 2500);
       }
     } catch (err) {
       console.warn("Clipboard API blocked or rejected by container browser security.", err);
@@ -263,6 +369,7 @@ export default function App() {
 
       setVideoResult(data);
       setStatus("success");
+      saveToHistory(data);
       
       setTimeout(() => {
         document.getElementById("dynamic-content-state-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -493,6 +600,67 @@ export default function App() {
           </span>
         </div>
 
+        {/* 5A. Recent Downloads History (Visible if user has downloaded items and currently idle) */}
+        {recentHistory.length > 0 && status === "idle" && (
+          <div id="recent-downloads-section" className="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-rose-500" />
+                <h3 className="font-sans font-bold text-xs sm:text-sm text-slate-800">
+                  {language === "ID" ? "Riwayat Unduhan Terakhir" : "Recent Downloads"}
+                </h3>
+                <span className="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                  {recentHistory.length}/5
+                </span>
+              </div>
+              <button
+                onClick={clearHistory}
+                id="btn-clear-history"
+                className="flex items-center gap-1 text-[11px] font-semibold text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+                title={language === "ID" ? "Hapus riwayat" : "Clear history"}
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>{language === "ID" ? "Hapus" : "Clear"}</span>
+              </button>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+              {recentHistory.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => {
+                    setVideoResult(item);
+                    setStatus("success");
+                    setTimeout(() => {
+                      document.getElementById("dynamic-content-state-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }, 50);
+                  }}
+                  className="flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-rose-50/40 hover:border-rose-200/60 transition-all cursor-pointer group text-left"
+                >
+                  {item.cover ? (
+                    <img
+                      src={`/api/download?type=cover&id=${encodeURIComponent(item.id)}&url=${encodeURIComponent(item.cover)}`}
+                      alt={item.title}
+                      className="w-11 h-11 rounded-lg object-cover bg-slate-200 shrink-0 border border-slate-200"
+                    />
+                  ) : (
+                    <div className="w-11 h-11 rounded-lg bg-slate-200 flex items-center justify-center shrink-0 text-slate-400">
+                      <Film className="w-5 h-5" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-sans font-semibold text-xs text-slate-800 truncate group-hover:text-rose-600 transition-colors">
+                      {item.title}
+                    </p>
+                    <p className="font-sans text-[11px] text-slate-400 truncate">
+                      {item.author}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Content Dynamic Area */}
         <div id="dynamic-content-state-container" className="w-full">
           <AnimatePresence mode="wait">
@@ -520,7 +688,7 @@ export default function App() {
       </main>
 
       {/* Sleek Design Footer */}
-      <footer className="w-full mt-auto bg-white border-t border-gray-100 py-6 px-6 md:px-12">
+      <footer className="w-full mt-auto bg-white border-t border-gray-100 py-6 px-6 md:px-12 pb-24 sm:pb-6 relative z-50">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-400 font-sans">
             {t.copyright} — Not affiliated with TikTok/ByteDance.
@@ -551,6 +719,24 @@ export default function App() {
           </nav>
         </div>
       </footer>
+
+      {/* 1A. Mobile Sticky AdSense Anchor Banner */}
+      <MobileStickyAnchorAd />
+
+      {/* 5B. Micro-Toast Notification for Paste Action */}
+      <AnimatePresence>
+        {showPasteToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 15, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 15, scale: 0.95 }}
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-900 text-white px-4 py-2.5 rounded-2xl shadow-xl text-xs sm:text-sm font-semibold border border-slate-800"
+          >
+            <span className="text-emerald-400 font-bold">✓</span>
+            <span>{language === "ID" ? "Tautan berhasil ditempel!" : "Link successfully pasted!"}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Overlay modal document viewer for GDPR/Legal compliance */}
       <LegalModal

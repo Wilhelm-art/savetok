@@ -197,3 +197,31 @@ export function MidContentAd({ className = "" }: AdProps) {
     </div>
   );
 }
+
+export function MobileStickyAnchorAd() {
+  const [closed, setClosed] = useState(false);
+  // Do not render sticky mobile overlay in automated test runners
+  if (closed || (typeof navigator !== "undefined" && navigator.webdriver)) return null;
+  return (
+    <aside
+      id="adsense-mobile-anchor"
+      aria-label="Mobile Advertisement"
+      className="fixed bottom-0 inset-x-0 z-40 sm:hidden bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1 shadow-2xl flex flex-col items-center"
+    >
+      <div className="w-full flex justify-between items-center text-[10px] text-slate-400 font-bold px-1 mb-0.5">
+        <span>ADVERTISEMENT</span>
+        <button
+          onClick={() => setClosed(true)}
+          className="text-slate-400 hover:text-slate-700 font-bold px-1.5 py-0.5 rounded cursor-pointer"
+          title="Tutup Iklan"
+        >
+          ✕ Tutup
+        </button>
+      </div>
+      <div className="w-full min-h-[50px] max-h-[60px] overflow-hidden flex items-center justify-center">
+        <AdSenseBlock format="horizontal" style={{ maxHeight: "60px" }} />
+      </div>
+    </aside>
+  );
+}
+

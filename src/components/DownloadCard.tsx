@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Film, Music, ArrowLeft, ExternalLink, Image as ImageIcon, Download, ChevronLeft, ChevronRight, FolderArchive } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Film, Music, ArrowLeft, ExternalLink, Image as ImageIcon, Download, ChevronLeft, ChevronRight, FolderArchive, Play, Pause } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { MediaResult, TranslationSet } from "../types";
 import { CardBaseAd } from "./AdSpace";
@@ -16,6 +16,36 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [downloadingIndex, setDownloadingIndex] = useState<number | null>(null);
   const [downloadingAllProgress, setDownloadingAllProgress] = useState<string | null>(null);
+
+  // Audio preview playback state
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const toggleAudioPlay = () => {
+    if (!audioRef.current && result.downloadMp3) {
+      const proxyUrl = `/api/download?type=audio&id=${encodeURIComponent(result.id)}&url=${encodeURIComponent(result.downloadMp3)}`;
+      audioRef.current = new Audio(proxyUrl);
+      audioRef.current.onended = () => setIsPlayingAudio(false);
+      audioRef.current.onerror = () => setIsPlayingAudio(false);
+    }
+    if (audioRef.current) {
+      if (isPlayingAudio) {
+        audioRef.current.pause();
+        setIsPlayingAudio(false);
+      } else {
+        audioRef.current.play().then(() => setIsPlayingAudio(true)).catch(() => setIsPlayingAudio(false));
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   // Safe helper to trigger standard browser file downloads through our secure proxy
   const handleDownload = (downloadUrl: string, type: "video" | "photo" | "audio", customIndex?: number) => {
@@ -238,6 +268,17 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
             <p className="font-sans text-xs md:text-sm text-gray-500 leading-relaxed">
               {isPhotoPost ? t.photoReadyDesc : t.videoReadyDesc}
             </p>
+
+            {/* Music metadata highlight if available */}
+            {result.musicTitle && (
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 bg-rose-50/70 border border-rose-200/50 px-3 py-1.5 rounded-xl mt-2 max-w-full overflow-hidden">
+                <Music className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                <span className="truncate">
+                  <span className="font-bold text-slate-900">{result.musicTitle}</span>
+                  {result.musicAuthor ? ` — ${result.musicAuthor}` : ""}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Photo Slides Thumbnails Strip (If Photo Post) */}
@@ -316,25 +357,40 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                   id="btn-download-mp4"
                   data-testid="btn-download-mp4"
                   onClick={() => handleDownload(result.downloadMp4!, "video")}
-                  className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-sans font-bold text-sm tracking-wide shadow-md shadow-rose-500/20 active:scale-98 transition-all cursor-pointer"
+                  className="w-full flex items-center justify-between py-4 px-6 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-sans font-bold text-sm tracking-wide shadow-md shadow-rose-500/20 active:scale-98 transition-all cursor-pointer"
                 >
-                  <Film className="w-4.5 h-4.5" />
-                  <span>{t.downloadMp4Label}</span>
+                  <div className="flex items-center gap-2">
+                    <Film className="w-4.5 h-4.5" />
+                    <span>{t.downloadMp4Label}</span>
+                  </div>
+                  <span className="text-[10px] uppercase font-black tracking-wider bg-white/20 px-2 py-0.5 rounded-md text-white shrink-0">
+                    HD 1080p
+                  </span>
                 </button>
               )
             )}
 
-            {/* AUDIO DOWNLOAD ACTION (Available for both video and photo posts) */}
+            {/* AUDIO DOWNLOAD ACTION WITH PREVIEW (Available for both video and photo posts) */}
             {result.downloadMp3 && (
-              <button
-                id="btn-download-mp3"
-                data-testid="btn-download-mp3"
-                onClick={() => handleDownload(result.downloadMp3!, "audio")}
-                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-slate-200 text-slate-700 font-sans font-bold text-sm tracking-wide bg-white hover:bg-slate-50 active:scale-98 transition-all cursor-pointer"
-              >
-                <Music className="w-4.5 h-4.5 text-rose-500" />
-                <span>{t.downloadMp3Label}</span>
-              </button>
+              <div className="flex items-center gap-2 w-full">
+                <button
+                  id="btn-download-mp3"
+                  data-testid="btn-download-mp3"
+                  onClick={() => handleDownload(result.downloadMp3!, "audio")}
+                  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-slate-200 text-slate-700 font-sans font-bold text-sm tracking-wide bg-white hover:bg-slate-50 active:scale-98 transition-all cursor-pointer"
+                >
+                  <Music className="w-4.5 h-4.5 text-rose-500" />
+                  <span>{t.downloadMp3Label}</span>
+                </button>
+                <button
+                  id="btn-preview-audio"
+                  onClick={toggleAudioPlay}
+                  title={isPlayingAudio ? "Jeda Audio" : "Putar Audio"}
+                  className="w-12 h-12 flex items-center justify-center rounded-2xl border-2 border-slate-200 bg-white hover:bg-slate-50 text-rose-500 active:scale-95 transition-all cursor-pointer shrink-0"
+                >
+                  {isPlayingAudio ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
+                </button>
+              </div>
             )}
           </div>
         </div>
