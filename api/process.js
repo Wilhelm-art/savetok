@@ -18,9 +18,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Tautan tidak valid. Silakan masukkan tautan TikTok yang benar.' });
     }
 
-    // LEVEL 1: RapidAPI
-    const apiKey = process.env.RAPIDAPI_KEY || "b147c13cbamshc23e106d8b0378ep1f58c6jsne1ae9647adb1";
-    try {
+    // LEVEL 1: RapidAPI (hanya dieksekusi jika RAPIDAPI_KEY diset di Environment Variables)
+    const apiKey = process.env.RAPIDAPI_KEY;
+    if (apiKey) {
+      try {
       const response = await fetch(`https://tiktok-video-no-watermark2.p.rapidapi.com/?url=${encodeURIComponent(trimmedUrl)}`, {
         method: 'GET',
         headers: {
@@ -52,6 +53,7 @@ export default async function handler(req, res) {
     } catch (err) {
       console.warn('RapidAPI Level 1 failed, trying TikWM Level 2 fallback...');
     }
+  }
 
     // LEVEL 2: TikWM API (Supports HD video, slide photos, audio)
     try {
