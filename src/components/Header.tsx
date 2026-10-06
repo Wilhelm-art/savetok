@@ -49,11 +49,11 @@ export default function Header({
   };
 
   const navLinks = [
-    { label: "Video", route: "/", icon: Film },
-    { label: "MP3", route: "/mp3", icon: Music },
-    { label: "Foto", route: "/foto", icon: ImageIcon },
-    { label: "Story", route: "/story", icon: Sparkles },
-    { label: "Panduan", route: "/panduan", icon: BookOpen },
+    { label: currentLanguage === "ID" ? "Video" : "Video", route: "/", icon: Film },
+    { label: currentLanguage === "ID" ? "MP3" : "MP3", route: "/mp3", icon: Music },
+    { label: currentLanguage === "ID" ? "Foto" : "Photos", route: "/foto", icon: ImageIcon },
+    { label: currentLanguage === "ID" ? "Story" : "Story", route: "/story", icon: Sparkles },
+    { label: currentLanguage === "ID" ? "Panduan" : "Guides", route: "/panduan", icon: BookOpen },
   ];
 
   const handleNav = (route: string) => {
@@ -114,12 +114,12 @@ export default function Header({
         <button
           id="btn-pwa-install"
           onClick={handleInstallClick}
-          title="Pasang Aplikasi di Layar Utama HP"
+          title={currentLanguage === "ID" ? "Pasang Aplikasi di Layar Utama HP" : "Install App on Home Screen"}
           className="bg-slate-100 hover:bg-slate-200/90 text-slate-700 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200/70 shadow-2xs cursor-pointer min-h-[36px]"
         >
           <Smartphone className="w-3.5 h-3.5 text-rose-500" />
           <span className="hidden md:inline">
-            {canInstall ? "Pasang App" : "App"}
+            {canInstall ? (currentLanguage === "ID" ? "Pasang App" : "Install App") : "App"}
           </span>
         </button>
 

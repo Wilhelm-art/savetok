@@ -77,7 +77,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
         }
       }
 
-      setZipProgress("Mengompres...");
+      setZipProgress(`${total}/${total}`);
       const zipBlob = await zip.generateAsync({ type: "blob" });
       const url = URL.createObjectURL(zipBlob);
       const a = document.createElement("a");
@@ -222,7 +222,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-[#FF4B72] transition-colors p-1"
-                title="Lihat Profil TikTok"
+                title={`TikTok: @${result.authorName}`}
               >
                 <ExternalLink className="w-4 h-4" />
               </a>
@@ -236,23 +236,21 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
               {result.title}
             </h2>
             <p className="font-sans text-xs md:text-sm text-gray-500 leading-relaxed">
-              {isPhotoPost 
-                ? "Postingan slide foto TikTok siap diunduh dalam resolusi asli tanpa watermark."
-                : "Video berhasil diproses dalam kualitas tinggi tanpa tanda air (no watermark)."}
+              {isPhotoPost ? t.photoReadyDesc : t.videoReadyDesc}
             </p>
           </div>
 
           {/* Photo Slides Thumbnails Strip (If Photo Post) */}
           {isPhotoPost && result.images && result.images.length > 1 && (
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Pilih Foto:</span>
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{t.selectPhoto}</span>
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
                 {result.images.map((imgUrl, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedPhotoIndex(i)}
                     className={`relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
-                      selectedPhotoIndex === i ? "border-[#FF4B72] scale-105 shadow-md" : "border-gray-200 opacity-60 hover:opacity-100"
+                      selectedPhotoIndex === i ? "border-rose-500 scale-105 shadow-md" : "border-gray-200 opacity-60 hover:opacity-100"
                     }`}
                   >
                     <img src={imgUrl} alt={`Thumb ${i+1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
@@ -275,7 +273,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                 >
                   <Download className="w-4.5 h-4.5" />
                   <span>
-                    {downloadingIndex === selectedPhotoIndex ? "Mengunduh..." : `${t.downloadSinglePhoto} #${selectedPhotoIndex + 1}`}
+                    {downloadingIndex === selectedPhotoIndex ? t.downloadingLabel : `${t.downloadSinglePhoto} #${selectedPhotoIndex + 1}`}
                   </span>
                 </button>
 
@@ -291,7 +289,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                       <ImageIcon className="w-4.5 h-4.5 text-rose-500" />
                       <span>
                         {downloadingAllProgress 
-                          ? `Mengunduh (${downloadingAllProgress})...` 
+                          ? `${t.downloadingLabel} (${downloadingAllProgress})` 
                           : `${t.downloadAllPhotos} (${result.images.length})`}
                       </span>
                     </button>
@@ -305,7 +303,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                     >
                       <FolderArchive className="w-4.5 h-4.5 text-rose-500" />
                       <span>
-                        {zipProgress ? `Mengemas ZIP (${zipProgress})...` : `Unduh Semua Foto (.ZIP)`}
+                        {zipProgress ? `${t.zippingLabel} (${zipProgress})` : t.downloadAllZip}
                       </span>
                     </button>
                   </>

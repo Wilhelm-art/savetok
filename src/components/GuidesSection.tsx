@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { BookOpen, Clock, Calendar, User, ChevronRight, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { seoArticles, SEOArticle } from "../data/seoArticles";
+import { getSeoArticles } from "../data/seoArticles";
+import { Language } from "../types";
 
-export default function GuidesSection() {
-  const [selectedArticleId, setSelectedArticleId] = useState<string>(seoArticles[0].id);
-  const activeArticle = seoArticles.find((a) => a.id === selectedArticleId) || seoArticles[0];
+interface GuidesSectionProps {
+  language?: Language;
+}
+
+export default function GuidesSection({ language = "ID" }: GuidesSectionProps) {
+  const articles = getSeoArticles(language);
+  const [selectedArticleId, setSelectedArticleId] = useState<string>("art-1");
+  const activeArticle = articles.find((a) => a.id === selectedArticleId) || articles[0];
 
   return (
     <section id="guides-section" className="w-full max-w-4xl mx-auto px-4 md:px-8 mt-10">
@@ -14,19 +20,21 @@ export default function GuidesSection() {
         <div className="flex flex-col gap-2 items-center md:items-start">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200/60 uppercase tracking-wider">
             <BookOpen className="w-3.5 h-3.5" />
-            <span>Pusat Panduan &amp; Edukasi</span>
+            <span>{language === "ID" ? "Pusat Panduan & Edukasi" : "Guide & Resource Center"}</span>
           </div>
           <h2 className="font-sans font-black text-2xl md:text-3xl text-slate-900 tracking-tight">
-            Panduan Lengkap Pengguna &amp; Kreator
+            {language === "ID" ? "Panduan Lengkap Pengguna & Kreator" : "Complete Creator & User Guides"}
           </h2>
           <p className="font-sans text-slate-600 text-sm md:text-base leading-relaxed max-w-2xl">
-            Pelajari cara memaksimalkan kualitas unduhan video, audio, dan slide foto Anda secara gratis, legal, dan aman.
+            {language === "ID"
+              ? "Pelajari cara memaksimalkan kualitas unduhan video, audio, dan slide foto Anda secara gratis, legal, dan aman."
+              : "Learn how to maximize your video, audio, and photo carousel downloads safely, for free, and in original quality."}
           </p>
         </div>
 
         {/* Article Tabs */}
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
-          {seoArticles.map((art) => (
+          {articles.map((art) => (
             <button
               key={art.id}
               onClick={() => setSelectedArticleId(art.id)}
@@ -86,7 +94,7 @@ export default function GuidesSection() {
                   </h4>
                   <div className="flex flex-col gap-2 pl-6">
                     {sec.content.map((p, pIdx) => (
-                      <p key={pIdx} className="font-sans text-gray-600 text-sm md:text-base leading-relaxed">
+                      <p key={pIdx} className="font-sans text-slate-600 text-sm md:text-base leading-relaxed">
                         {p}
                       </p>
                     ))}

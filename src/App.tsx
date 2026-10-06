@@ -113,8 +113,21 @@ function getRouteHero(route: string, lang: Language, t: typeof translations[Lang
 
 export default function App() {
   // 1. Multilingual State - Indonesian is the default, supported by EN
-  const [language, setLanguage] = useState<Language>("ID");
+  const [language, setLanguage] = useState<Language>(() => {
+    try {
+      const saved = localStorage.getItem("savetok_lang");
+      if (saved === "EN" || saved === "ID") return saved;
+    } catch {}
+    return "ID";
+  });
   const t = translations[language];
+
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+    try {
+      localStorage.setItem("savetok_lang", lang);
+    } catch {}
+  };
 
   // Route state for sub-landing pages (/mp3, /foto, /story, /panduan)
   const [currentRoute, setCurrentRoute] = useState<string>(() => window.location.pathname || "/");
@@ -262,7 +275,7 @@ export default function App() {
       {/* Modular Navigation Header */}
       <Header 
         currentLanguage={language} 
-        onLanguageChange={setLanguage} 
+        onLanguageChange={handleLanguageChange} 
         currentRoute={currentRoute}
         onNavigate={navigateTo}
       />
@@ -281,7 +294,7 @@ export default function App() {
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-white text-slate-800 border border-slate-200 shadow-2xs mx-auto">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>
-              {language === "ID" ? "Platform Unduh TikTok Tercepat & Kualitas Asli" : "Fastest TikTok Media Downloader in Original Quality"}
+              {t.heroBadge}
             </span>
           </div>
 
@@ -309,10 +322,10 @@ export default function App() {
         <div className="w-full max-w-3xl flex items-center justify-center">
           <div className="inline-flex bg-slate-200/70 p-1 rounded-2xl border border-slate-200 gap-1 overflow-x-auto max-w-full">
             {[
-              { id: "/", label: "Video MP4", icon: Film },
-              { id: "/mp3", label: "Audio MP3", icon: Music },
-              { id: "/foto", label: "Slide Foto", icon: ImageIcon },
-              { id: "/story", label: "Story", icon: Sparkles }
+              { id: "/", label: t.formatVideo, icon: Film },
+              { id: "/mp3", label: t.formatMp3, icon: Music },
+              { id: "/foto", label: t.formatPhotos, icon: ImageIcon },
+              { id: "/story", label: t.formatStory, icon: Sparkles }
             ].map((tab) => {
               const active = currentRoute === tab.id;
               const Icon = tab.icon;
@@ -423,19 +436,19 @@ export default function App() {
         <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 w-full max-w-3xl text-xs font-semibold text-slate-600">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs">
             <span className="text-rose-500 font-black">✓</span>
-            {language === "ID" ? "Tanpa Watermark HD" : "No Watermark HD"}
+            {t.badgeNoWm}
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs">
             <span className="text-rose-500 font-black">✓</span>
-            {language === "ID" ? "Ekstrak MP3 320kbps" : "320kbps MP3 Audio"}
+            {t.badgeMp3}
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs">
             <span className="text-rose-500 font-black">✓</span>
-            {language === "ID" ? "Koleksi Foto .ZIP" : "Batch Photo ZIP"}
+            {t.badgeZip}
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs">
             <span className="text-rose-500 font-black">✓</span>
-            {language === "ID" ? "Gratis & Tanpa Akun" : "100% Free & No Login"}
+            {t.badgeFree}
           </span>
         </div>
 
@@ -458,7 +471,7 @@ export default function App() {
         </div>
 
         {/* In-depth Editorial Guides & Articles for SEO / AdSense Value */}
-        <GuidesSection />
+        <GuidesSection language={language} />
 
         {/* Below the fold SEO section containing tutorial cards and collapsible FAQ accordion */}
         <SEODetails t={t} />

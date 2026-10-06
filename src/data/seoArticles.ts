@@ -1,3 +1,5 @@
+import { Language } from "../types";
+
 export interface ArticleSection {
   heading: string;
   content: string[];
@@ -15,7 +17,7 @@ export interface SEOArticle {
   sections: ArticleSection[];
 }
 
-export const seoArticles: SEOArticle[] = [
+export const seoArticlesID: SEOArticle[] = [
   {
     id: "art-1",
     slug: "cara-download-sound-tiktok-mp3",
@@ -29,7 +31,7 @@ export const seoArticles: SEOArticle[] = [
       {
         heading: "Mengapa Perlu Mengekstrak Audio MP3 dari TikTok?",
         content: [
-          "TikTok adalah pusat lahirnya tren musik dan sound effect viral dunia. Seringkali kita menemukan remix lagu unik, narasi podcast menarik, atau backsound estetik yang tidak tersedia di Spotify atau YouTube Music.",
+          "TikTok adalah pusat lahirnya tren musik dan sound effect viral dunia. Seringkali kita menemukan remix lagu unik, narasi podcast menarik, atau backsound estetik yang tidak tersedia di platform streaming musik konvensional.",
           "Menyimpan audio secara terpisah dalam format MP3 memungkinkan Anda mendengarkannya secara offline, menjadikannya nada dering (ringtone), atau menggunakannya sebagai referensi audio editing."
         ]
       },
@@ -46,7 +48,7 @@ export const seoArticles: SEOArticle[] = [
       {
         heading: "Tips Kualitas Audio & Etika Penggunaan",
         content: [
-          "SaveTok mempertahankan bitrate audio asli dari server TikTok (biasanya 128 kbps hingga 320 kbps) sehingga tidak ada penurunan kualitas suara.",
+          "SaveTok mempertahankan bitrate audio asli dari server TikTok (hingga 320 kbps) sehingga tidak ada penurunan kualitas suara.",
           "Ingatlah untuk selalu menghormati hak cipta musisi atau kreator asli jika Anda berniat mempublikasikan ulang karya dengan sound tersebut di platform lain."
         ]
       }
@@ -123,3 +125,118 @@ export const seoArticles: SEOArticle[] = [
     ]
   }
 ];
+
+export const seoArticlesEN: SEOArticle[] = [
+  {
+    id: "art-1",
+    slug: "how-to-download-tiktok-sound-mp3",
+    title: "How to Download TikTok Songs & Sounds into Crystal-Clear MP3 Audio",
+    metaDescription: "Step-by-step tutorial on how to extract viral TikTok audio, songs, and background music into high-quality 320kbps MP3 files for free without software.",
+    category: "Audio MP3",
+    readingTime: "3 min read",
+    publishedDate: "October 6, 2026",
+    author: "SaveTok Editorial Team",
+    sections: [
+      {
+        heading: "Why Extract MP3 Audio from TikTok?",
+        content: [
+          "TikTok is the epicenter of global viral music and unique sound effects. Often, creators produce bespoke song remixes, insightful podcast snippets, or soothing ambient audio that isn't available on mainstream streaming platforms.",
+          "Saving audio separately in MP3 format allows you to listen offline, set personalized ringtones, or utilize sound clips as creative video editing references."
+        ]
+      },
+      {
+        heading: "Easy Steps to Download TikTok Sounds with SaveTok",
+        content: [
+          "1. Open the TikTok app and find the video or slideshow featuring the audio you wish to save.",
+          "2. Tap the 'Share' button on the right side of the screen and select 'Copy Link'.",
+          "3. Visit SaveTok.web.id/mp3 in your browser (Chrome, Safari, Edge, or Firefox).",
+          "4. Paste the URL into the search box at the top, then press 'Download'.",
+          "5. SaveTok analyzes the stream and provides the 'Download MP3 (Audio Only)' button. Click it to immediately save the audio file."
+        ]
+      },
+      {
+        heading: "Audio Bitrate Fidelity & Creator Ethics",
+        content: [
+          "SaveTok preserves the authentic audio bitrate delivered directly by TikTok servers (up to 320 kbps) without artificial downsampling.",
+          "Always remember to respect musician and artist copyrights when repurposing sound clips for commercial projects or public distribution."
+        ]
+      }
+    ]
+  },
+  {
+    id: "art-2",
+    slug: "guide-download-tiktok-photo-slides",
+    title: "Complete Guide to Saving TikTok Photo Carousel Slides Without Watermarks",
+    metaDescription: "Learn how to download full-resolution TikTok carousel slide photos individually or packaged in a 1-click ZIP archive on phone and PC.",
+    category: "Photo Carousel",
+    readingTime: "4 min read",
+    publishedDate: "October 6, 2026",
+    author: "SaveTok Editorial Team",
+    sections: [
+      {
+        heading: "The Surge of TikTok Photo Mode Carousels",
+        content: [
+          "Since TikTok launched Photo Mode (carousel slideshows), creators frequently publish high-resolution photo sets, educational infographics, recipe cards, and multi-slide stories.",
+          "Taking manual screenshots results in degraded image quality obscured by TikTok UI buttons, captions, and bouncing watermark tags."
+        ]
+      },
+      {
+        heading: "How to Download High-Res Slides in Original Quality",
+        content: [
+          "1. Locate the TikTok photo slide post you want to download and copy its URL.",
+          "2. Navigate to SaveTok.web.id/foto and paste the copied link.",
+          "3. SaveTok instantly recognizes the slideshow and loads all pictures into an interactive carousel viewer.",
+          "4. You can download individual pictures one-by-one or click 'Download All Photos' to save the complete album.",
+          "5. For desktop users or creators with large sets, click 'Download All Photos (.ZIP)' to package the entire collection into a single compressed file directly in your browser."
+        ]
+      },
+      {
+        heading: "Why SaveTok is the Premier Choice for Photo Slides",
+        content: [
+          "Images are retrieved directly from TikTok's high-speed CDN in their original uploaded JPEG/PNG resolution (up to 1080x1920) without visual compression and completely free of watermarks."
+        ]
+      }
+    ]
+  },
+  {
+    id: "art-3",
+    slug: "creator-tips-cross-posting-without-watermark",
+    title: "Creator Strategy: Why You Must Remove TikTok Watermarks Before Cross-Posting",
+    metaDescription: "Why Instagram Reels and YouTube Shorts algorithms limit reach for videos containing TikTok watermarks, and how to fix it with SaveTok.",
+    category: "Creator Tips",
+    readingTime: "3 min read",
+    publishedDate: "October 6, 2026",
+    author: "SaveTok Editorial Team",
+    sections: [
+      {
+        heading: "Algorithmic Penalties Against Third-Party Watermarks",
+        content: [
+          "Platforms including Meta (Instagram Reels) and YouTube Shorts explicitly confirm their recommendation engines suppress distribution for clips sporting rival logos or floating watermarks.",
+          "If you cross-post directly with an embedded TikTok watermark, your likelihood of landing on the Explore page or Shorts feed plummets significantly."
+        ]
+      },
+      {
+        heading: "Streamlined Workflow for Multi-Platform Creators",
+        content: [
+          "As an active creator, your time is invaluable. The optimal daily production workflow is:",
+          "1. Film, edit, and post your original video on TikTok first.",
+          "2. Immediately copy the video link and input it into SaveTok.web.id.",
+          "3. Download the pristine Full HD MP4 file without any watermarks.",
+          "4. Upload the clean video to Instagram Reels, YouTube Shorts, and Facebook Reels to maximize cross-platform audience growth."
+        ]
+      },
+      {
+        heading: "Privacy, Zero Storage, and Data Security",
+        content: [
+          "SaveTok operates statelessly: we do not store, log, or host copies of your media on our servers. Your video streams securely into your browser, safeguarding your creative assets."
+        ]
+      }
+    ]
+  }
+];
+
+export function getSeoArticles(lang: Language): SEOArticle[] {
+  return lang === "EN" ? seoArticlesEN : seoArticlesID;
+}
+
+export const seoArticles = seoArticlesID;
