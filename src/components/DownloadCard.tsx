@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Film, Music, ArrowLeft, ExternalLink, Image as ImageIcon, Download, ChevronLeft, ChevronRight, FolderArchive } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import JSZip from "jszip";
 import { MediaResult, TranslationSet } from "../types";
 import { CardBaseAd } from "./AdSpace";
 
@@ -62,7 +61,9 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
     setZipProgress(`0/${result.images.length}`);
 
     try {
-      const zip = new JSZip();
+      const JSZipModule = await import("jszip");
+      const JSZipConstructor = ((JSZipModule as any).default || JSZipModule);
+      const zip = new JSZipConstructor();
       const folder = zip.folder(`SaveTok_${result.id}`) || zip;
       const total = result.images.length;
 
@@ -270,7 +271,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                   id="btn-download-selected-photo"
                   data-testid="btn-download-photo"
                   onClick={() => handleDownload(result.images![selectedPhotoIndex], "photo", selectedPhotoIndex)}
-                  className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF4B72] to-[#FF7043] text-white font-sans font-bold text-sm tracking-wide shadow-md hover:opacity-95 active:scale-98 transition-all cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-sans font-bold text-sm tracking-wide shadow-md shadow-rose-500/20 active:scale-98 transition-all cursor-pointer"
                 >
                   <Download className="w-4.5 h-4.5" />
                   <span>
@@ -285,9 +286,9 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                       data-testid="btn-download-all-photos"
                       onClick={handleDownloadAllPhotos}
                       disabled={!!downloadingAllProgress || isZipping}
-                      className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-[#FF4B72] text-[#FF4B72] font-sans font-bold text-sm tracking-wide bg-transparent hover:bg-[#FF4B72]/5 active:scale-98 transition-all cursor-pointer disabled:opacity-70"
+                      className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-slate-900 text-slate-900 font-sans font-bold text-sm tracking-wide bg-white hover:bg-slate-50 active:scale-98 transition-all cursor-pointer disabled:opacity-70"
                     >
-                      <ImageIcon className="w-4.5 h-4.5" />
+                      <ImageIcon className="w-4.5 h-4.5 text-rose-500" />
                       <span>
                         {downloadingAllProgress 
                           ? `Mengunduh (${downloadingAllProgress})...` 
@@ -300,9 +301,9 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                       data-testid="btn-download-zip"
                       onClick={handleDownloadZip}
                       disabled={isZipping || !!downloadingAllProgress}
-                      className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-2xl border border-gray-200 text-gray-700 font-sans font-semibold text-xs md:text-sm tracking-wide bg-gray-50 hover:bg-gray-100 active:scale-98 transition-all cursor-pointer disabled:opacity-70"
+                      className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border border-slate-200 text-slate-700 font-sans font-semibold text-xs md:text-sm tracking-wide bg-slate-50 hover:bg-slate-100 active:scale-98 transition-all cursor-pointer disabled:opacity-70"
                     >
-                      <FolderArchive className="w-4 h-4 text-[#FF4B72]" />
+                      <FolderArchive className="w-4.5 h-4.5 text-rose-500" />
                       <span>
                         {zipProgress ? `Mengemas ZIP (${zipProgress})...` : `Unduh Semua Foto (.ZIP)`}
                       </span>
@@ -317,7 +318,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                   id="btn-download-mp4"
                   data-testid="btn-download-mp4"
                   onClick={() => handleDownload(result.downloadMp4!, "video")}
-                  className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF4B72] to-[#FF7043] text-white font-sans font-bold text-sm tracking-wide shadow-md hover:opacity-95 active:scale-98 transition-all cursor-pointer"
+                  className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-rose-500 hover:bg-rose-600 text-white font-sans font-bold text-sm tracking-wide shadow-md shadow-rose-500/20 active:scale-98 transition-all cursor-pointer"
                 >
                   <Film className="w-4.5 h-4.5" />
                   <span>{t.downloadMp4Label}</span>
@@ -331,9 +332,9 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                 id="btn-download-mp3"
                 data-testid="btn-download-mp3"
                 onClick={() => handleDownload(result.downloadMp3!, "audio")}
-                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border border-gray-200 text-gray-700 font-sans font-semibold text-sm tracking-wide bg-gray-50 hover:bg-gray-100 active:scale-98 transition-all cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-slate-200 text-slate-700 font-sans font-bold text-sm tracking-wide bg-white hover:bg-slate-50 active:scale-98 transition-all cursor-pointer"
               >
-                <Music className="w-4.5 h-4.5 text-[#FF7043]" />
+                <Music className="w-4.5 h-4.5 text-rose-500" />
                 <span>{t.downloadMp3Label}</span>
               </button>
             )}

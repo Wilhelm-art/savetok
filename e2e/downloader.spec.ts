@@ -83,7 +83,7 @@ test.describe('SaveTok End-to-End User Journeys', () => {
     await expect(errorMsg).not.toBeVisible();
   });
 
-  test('Journey 4: Multilingual Switcher (ID, EN, ES)', async ({ appPage }) => {
+  test('Journey 4: Multilingual Switcher (ID & EN)', async ({ appPage }) => {
     const input = appPage.locator('[data-testid="url-input"]');
 
     // Default Indonesian placeholder
@@ -94,10 +94,10 @@ test.describe('SaveTok End-to-End User Journeys', () => {
     await enBtn.click();
     await expect(input).toHaveAttribute('placeholder', /Paste TikTok URL/);
 
-    // Switch to Spanish
-    const esBtn = appPage.locator('[data-testid="lang-btn-es"]');
-    await esBtn.click();
-    await expect(input).toHaveAttribute('placeholder', /Pega el enlace/);
+    // Switch back to Indonesian
+    const idBtn = appPage.locator('[data-testid="lang-btn-id"]');
+    await idBtn.click();
+    await expect(input).toHaveAttribute('placeholder', /Tempel tautan video/);
   });
 
   test('Journey 5: Legal Modals Navigation', async ({ appPage }) => {

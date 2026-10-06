@@ -104,7 +104,7 @@ export default function SEODetails({ t }: SEODetailsProps) {
               Download video TikTok mp4 dengan gratis!
             </h2>
             <p className="font-sans text-gray-600 leading-relaxed text-sm md:text-base max-w-3xl">
-              SSS TikTok download mp4 adalah salah satu alat paling populer untuk <strong>unduh TikTok mp4 online gratis</strong> dan <strong>hapus watermark tiktok online</strong>. Tidak perlu menggunakan aplikasi tambahan untuk menggunakan layanan kami, yang kamu butuhkan hanya browser dan tautan untuk ditempelkan pada halaman utama.
+              <strong>SaveTok</strong> adalah alat pengunduh video dan audio TikTok paling praktis untuk <strong>unduh TikTok MP4 online gratis</strong> dan <strong>hapus watermark TikTok online</strong>. Tidak perlu menggunakan aplikasi tambahan untuk menggunakan layanan kami, yang kamu butuhkan hanya browser dan tautan video untuk ditempelkan pada kolom di atas.
             </p>
           </div>
 

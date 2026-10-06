@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Download, Smartphone, Film, Music, Image as ImageIcon, Sparkles, BookOpen } from "lucide-react";
+import { Smartphone, Film, Music, Image as ImageIcon, Sparkles, BookOpen } from "lucide-react";
 import { Language } from "../types";
+import SaveTokLogo from "./SaveTokLogo";
 
 interface HeaderProps {
   currentLanguage: Language;
@@ -15,7 +16,7 @@ export default function Header({
   currentRoute = "/",
   onNavigate
 }: HeaderProps) {
-  const languages: Language[] = ["ID", "EN", "ES"];
+  const languages: Language[] = ["ID", "EN"];
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [canInstall, setCanInstall] = useState(false);
 
@@ -64,23 +65,26 @@ export default function Header({
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full h-20 z-50 bg-gradient-to-r from-[#FF4B72] to-[#FF7043] shadow-md flex items-center justify-between px-4 sm:px-6 md:px-12">
+    <header className="fixed top-0 left-0 w-full h-18 z-50 bg-white/90 backdrop-blur-xl border-b border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.02)] flex items-center justify-between px-3 sm:px-6 md:px-10 transition-colors">
       {/* Brand Logo & Name */}
       <div 
         id="header-brand-container"
-        className="flex items-center gap-2.5 cursor-pointer active:scale-95 transition-all shrink-0"
+        className="flex items-center gap-2.5 cursor-pointer active:scale-95 transition-all shrink-0 select-none"
         onClick={() => handleNav("/")}
       >
-        <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-md">
-          <Download className="w-5.5 h-5.5 text-[#FF4B72]" />
+        <SaveTokLogo size={36} />
+        <div className="flex items-center gap-1.5">
+          <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-sans">
+            SaveTok
+          </span>
+          <span className="hidden sm:inline-block px-1.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-rose-50 text-rose-600 border border-rose-200/60">
+            PRO
+          </span>
         </div>
-        <span className="text-2xl font-black tracking-tight text-white hidden sm:inline">
-          SaveTok
-        </span>
       </div>
 
       {/* Sub-Route Navigation Pills */}
-      <nav className="flex items-center space-x-1 sm:space-x-1.5 md:space-x-2 text-xs md:text-sm font-semibold text-white/90">
+      <nav className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto py-1 scrollbar-none text-xs md:text-sm font-semibold max-w-[45vw] sm:max-w-none">
         {navLinks.map((item) => {
           const isActive = currentRoute === item.route;
           const Icon = item.icon;
@@ -91,10 +95,10 @@ export default function Header({
               id={`header-nav-${navId}`}
               data-testid={`header-nav-${navId}`}
               onClick={() => handleNav(item.route)}
-              className={`px-2.5 py-1.5 rounded-full transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap min-h-[36px] ${
                 isActive 
-                  ? "bg-white text-[#FF4B72] shadow-sm font-bold" 
-                  : "text-white/90 hover:bg-white/10 hover:text-white"
+                  ? "bg-slate-900 text-white shadow-xs font-bold" 
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -104,43 +108,40 @@ export default function Header({
         })}
       </nav>
 
-      {/* Actions: PWA Install + Language Switcher */}
-      <div className="flex items-center space-x-2 shrink-0">
+      {/* Actions: PWA Install + 2-way Language Switcher */}
+      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
         {/* PWA Install Button */}
         <button
           id="btn-pwa-install"
           onClick={handleInstallClick}
           title="Pasang Aplikasi di Layar Utama HP"
-          className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-white/20 shadow-xs cursor-pointer"
+          className="bg-slate-100 hover:bg-slate-200/90 text-slate-700 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200/70 shadow-2xs cursor-pointer min-h-[36px]"
         >
-          <Smartphone className="w-3.5 h-3.5 text-white" />
+          <Smartphone className="w-3.5 h-3.5 text-rose-500" />
           <span className="hidden md:inline">
             {canInstall ? "Pasang App" : "App"}
           </span>
         </button>
 
-        {/* Inline language switcher */}
-        <div className="flex items-center pl-1 sm:pl-2 border-l border-white/20">
-          <div className="flex bg-white/20 backdrop-blur-md rounded-full p-0.5 sm:p-1 shadow-sm">
-            {languages.map((lang) => (
-              <button
-                key={lang}
-                id={`lang-btn-${lang.toLowerCase()}`}
-                data-testid={`lang-btn-${lang.toLowerCase()}`}
-                onClick={() => onLanguageChange(lang)}
-                className={`min-w-[32px] sm:min-w-[36px] h-8 flex items-center justify-center rounded-full text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
-                  currentLanguage === lang
-                    ? "bg-white text-[#FF4B72] shadow-sm"
-                    : "text-white hover:bg-white/10"
-                }`}
-              >
-                {lang}
-              </button>
-            ))}
-          </div>
+        {/* Focused 2-way Language Segmented Toggle (ID | EN) */}
+        <div className="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200/80 shadow-2xs">
+          {languages.map((lang) => (
+            <button
+              key={lang}
+              id={`lang-btn-${lang.toLowerCase()}`}
+              data-testid={`lang-btn-${lang.toLowerCase()}`}
+              onClick={() => onLanguageChange(lang)}
+              className={`min-w-[32px] sm:min-w-[36px] h-7 sm:h-8 flex items-center justify-center rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
+                currentLanguage === lang
+                  ? "bg-white text-slate-900 shadow-xs"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              {lang}
+            </button>
+          ))}
         </div>
       </div>
     </header>
   );
 }
-

@@ -1,11 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="savetok-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF4B72" />
-      <stop offset="100%" stop-color="#FF7043" />
+    <linearGradient id="st-badge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E1B4B" />
+    </linearGradient>
+    <linearGradient id="st-crimson-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF2D55" />
+      <stop offset="100%" stop-color="#FF5252" />
+    </linearGradient>
+    <linearGradient id="st-cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F2FE" />
+      <stop offset="100%" stop-color="#4FACFE" />
     </linearGradient>
   </defs>
-  <rect width="32" height="32" rx="8" fill="url(#savetok-grad)" />
-  <!-- Download arrow icon -->
-  <path d="M16 7v12m0 0l-4.5-4.5M16 19l4.5-4.5M8 23h16" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#st-badge-grad)" stroke="#334155" stroke-width="1.5" />
+
+  <!-- Cyan accent wave -->
+  <path d="M23 18C18.5 18 16 21.5 16 26C16 32 23 33 27 35C30.5 36.8 33 38.5 33 42C33 45.5 30 47 26 47C22 47 18.5 44.5 17 42" stroke="url(#st-cyan-grad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" />
+
+  <!-- Crimson S-curve and arrow -->
+  <path d="M26 17C35 17 41 20 41 25.5C41 31 34 32.5 28 34.5C23.5 36 21 38 21 42C21 45 23.5 47 28 47" stroke="url(#st-crimson-grad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M42 27V45M42 45L36 39M42 45L48 39" stroke="url(#st-crimson-grad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+
+  <circle cx="32" cy="25" r="2.5" fill="#FFFFFF" opacity="0.9" />
 </svg>

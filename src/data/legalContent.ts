@@ -75,38 +75,5 @@ export const legalContent: Record<Language, Record<LegalDocType, LegalDocument>>
         "3. Service Continuity: While we strive for seamless operation, we cannot guarantee uninterrupted service due to potential external infrastructure and policy changes by third-party platforms."
       ],
     }
-  },
-  ES: {
-    privacy: {
-      title: "Política de Privacidad",
-      body: [
-        "Última Actualización: 12 de Julio de 2026",
-        "En SaveTok, priorizamos tu privacidad. Esta política describe qué datos procesamos.",
-        "1. Recopilación de Información: SaveTok es un servicio gratuito y completamente sin estado. No almacenamos enlaces procesados ni datos de descarga en nuestros servidores.",
-        "2. Datos Analíticos: Podemos usar proveedores de analítica anónima para monitorizar el rendimiento del servicio.",
-        "3. Google AdSense: Utilizamos anuncios de Google para mantener nuestro servicio gratuito.",
-        "4. Contacto: Si tienes consultas, escribe a support@savetok.web.id."
-      ],
-    },
-    terms: {
-      title: "Términos de Servicio",
-      body: [
-        "Última Actualización: 12 de Julio de 2026",
-        "Por favor, lee estos términos antes de usar la plataforma SaveTok.",
-        "1. Aceptación: El uso de este servicio implica la aceptación de estos términos.",
-        "2. Uso Permitido: Uso exclusivamente privado y no comercial.",
-        "3. Propiedad Intelectual: Respetamos los derechos de autor y la propiedad de los creadores.",
-        "4. Limitación de Responsabilidad: El servicio se suministra 'tal cual' sin garantías expresas."
-      ],
-    },
-    disclaimer: {
-      title: "Descargo de Responsabilidad",
-      body: [
-        "Última Actualización: 12 de Julio de 2026",
-        "1. No Afiliación: SaveTok es una herramienta independiente no afiliada a TikTok ni ByteDance Ltd.",
-        "2. Derechos: Todas las marcas pertenecen a sus respectivos dueños.",
-        "3. Servicio: No garantizamos disponibilidad ininterrumpida ante cambios de terceros."
-      ],
-    }
   }
 };
