@@ -1,91 +1,169 @@
-import { Film, Music, ArrowLeft, ExternalLink, Calendar } from "lucide-react";
-import { motion } from "motion/react";
-import { VideoResult, TranslationSet } from "../types";
+import { useState } from "react";
+import { Film, Music, ArrowLeft, ExternalLink, Image as ImageIcon, Download, ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { MediaResult, TranslationSet } from "../types";
 import { CardBaseAd } from "./AdSpace";
 
 interface DownloadCardProps {
-  result: VideoResult;
+  result: MediaResult;
   t: TranslationSet;
   onReset: () => void;
   key?: string;
 }
 
 export default function DownloadCard({ result, t, onReset }: DownloadCardProps) {
-  // Safe helper to trigger standard browser file downloads without opening new tabs
-  const handleDownload = (downloadUrl: string, extension: string) => {
-    // Instead of forcing a new tab, we pass the TikTok CDN link to our own backend API proxy
-    // Our Vercel backend will fetch the video and instantly stream it down to the user 
-    // as an attachment, forcing a native, direct download right on this page!
-    const proxyUrl = `/api/download?url=${encodeURIComponent(downloadUrl)}`;
+  const isPhotoPost = result.mediaType === "photo" && Array.isArray(result.images) && result.images.length > 0;
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const [downloadingIndex, setDownloadingIndex] = useState<number | null>(null);
+
+  // Safe helper to trigger standard browser file downloads through our secure proxy
+  const handleDownload = (downloadUrl: string, type: "video" | "photo" | "audio", customIndex?: number) => {
+    if (!downloadUrl) return;
+
+    if (customIndex !== undefined) {
+      setDownloadingIndex(customIndex);
+      setTimeout(() => setDownloadingIndex(null), 2000);
+    }
+
+    const proxyUrl = `/api/download?type=${type}&id=${encodeURIComponent(result.id)}${customIndex !== undefined ? `_${customIndex + 1}` : ""}&url=${encodeURIComponent(downloadUrl)}`;
     
-    // Create temporary link pointing to our proxy
     const a = document.createElement("a");
     a.href = proxyUrl;
-    // Tell browser this is a download
-    a.download = `SaveTok_video_${result.id}.${extension}`;
-    
-    // Trigger direct download and remove
+    a.download = `SaveTok_${type}_${result.id}${customIndex !== undefined ? `_${customIndex + 1}` : ""}.${type === "audio" ? "mp3" : type === "photo" ? "jpg" : "mp4"}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
   };
 
+  // Download all photos sequentially with slight delay to prevent browser download flood block
+  const handleDownloadAllPhotos = () => {
+    if (!result.images || result.images.length === 0) return;
+    result.images.forEach((imgUrl, idx) => {
+      setTimeout(() => {
+        handleDownload(imgUrl, "photo", idx);
+      }, idx * 400);
+    });
+  };
+
   return (
     <motion.div
       id="download-result-container"
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
+      data-testid="download-card"
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="w-full max-w-2xl mx-auto mt-6 flex flex-col gap-6"
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+      className="w-full max-w-3xl mx-auto mt-6 flex flex-col gap-6"
     >
       {/* Back button link */}
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <button
           id="btn-back-to-downloader"
+          data-testid="btn-back-to-downloader"
           onClick={onReset}
-          className="flex items-center gap-1.5 text-sm font-sans font-bold text-gray-500 hover:text-[#FF4B72] transition-colors focus:outline-none min-h-[48px] px-2 -ml-2"
+          className="inline-flex items-center gap-2 text-xs md:text-sm font-sans font-bold text-gray-500 hover:text-[#FF4B72] transition-colors focus:outline-none min-h-[44px] px-3 -ml-2 rounded-xl hover:bg-gray-50 cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>{t.downloadAnother}</span>
         </button>
+
+        {/* Media type indicator badge */}
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase bg-black/5 text-gray-700">
+          {isPhotoPost ? (
+            <>
+              <ImageIcon className="w-3.5 h-3.5 text-[#FF4B72]" />
+              <span>{t.photoSlideCount} ({result.images?.length})</span>
+            </>
+          ) : (
+            <>
+              <Film className="w-3.5 h-3.5 text-[#FF4B72]" />
+              <span>Video HD (No WM)</span>
+            </>
+          )}
+        </span>
       </div>
 
-      {/* Main card */}
+      {/* Main Card */}
       <div 
         id="result-media-card"
-        className="w-full bg-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-gray-100 overflow-hidden flex flex-col md:flex-row"
+        className="w-full bg-white rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.06)] border border-gray-100 overflow-hidden flex flex-col md:flex-row"
       >
-        {/* Media Preview pane */}
+        {/* Preview pane */}
         <div 
           id="result-thumbnail-container"
-          className="w-full md:w-[40%] relative aspect-video md:aspect-auto md:min-h-[380px] bg-gray-900 overflow-hidden group shrink-0"
+          className="w-full md:w-[46%] relative bg-gray-950 overflow-hidden flex flex-col items-center justify-center min-h-[320px] md:min-h-[420px] group"
         >
-          <img
-            id="result-thumbnail-img"
-            src={result.thumbnailUrl}
-            alt={result.title}
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105"
-          />
-          {/* Duration Badge */}
-          <div 
-            id="duration-badge"
-            className="absolute bottom-3 right-3 bg-black/75 text-white px-2.5 py-1 rounded-md text-xs font-sans font-bold tracking-wide backdrop-blur-sm"
-          >
-            {result.duration}
-          </div>
+          {isPhotoPost && result.images && result.images.length > 0 ? (
+            // Photo Slideshow Preview
+            <div className="relative w-full h-full flex items-center justify-center">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={selectedPhotoIndex}
+                  src={result.images[selectedPhotoIndex]}
+                  alt={`Slide ${selectedPhotoIndex + 1}`}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-contain max-h-[420px]"
+                />
+              </AnimatePresence>
+
+              {/* Slide Counter Overlay */}
+              <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold tracking-wider">
+                {selectedPhotoIndex + 1} / {result.images.length}
+              </div>
+
+              {/* Prev / Next controls */}
+              {result.images.length > 1 && (
+                <>
+                  <button
+                    onClick={() => setSelectedPhotoIndex((prev) => (prev > 0 ? prev - 1 : result.images!.length - 1))}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/90 transition-all cursor-pointer backdrop-blur-sm shadow-md"
+                    aria-label="Previous photo"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => setSelectedPhotoIndex((prev) => (prev < result.images!.length - 1 ? prev + 1 : 0))}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/90 transition-all cursor-pointer backdrop-blur-sm shadow-md"
+                    aria-label="Next photo"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </>
+              )}
+            </div>
+          ) : (
+            // Video Thumbnail Preview
+            <div className="relative w-full h-full">
+              <img
+                id="result-thumbnail-img"
+                src={result.thumbnailUrl}
+                alt={result.title}
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
+              />
+              <div 
+                id="duration-badge"
+                className="absolute bottom-4 right-4 bg-black/80 text-white px-3 py-1 rounded-lg text-xs font-sans font-bold tracking-wide backdrop-blur-md border border-white/10"
+              >
+                {result.duration}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Action Detail list */}
+        {/* Action Detail List */}
         <div 
           id="result-details-pane"
-          className="w-full md:w-[60%] p-6 flex flex-col justify-between gap-6"
+          className="w-full md:w-[54%] p-6 md:p-8 flex flex-col justify-between gap-6"
         >
           <div>
             {/* Creator Tag */}
-            <div className="flex items-center gap-1.5 mb-2.5">
-              <span className="font-sans font-bold text-xs text-[#FF4B72] tracking-wider uppercase bg-[#FF4B72]/10 px-2 py-0.5 rounded-md">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="font-sans font-bold text-xs text-[#FF4B72] tracking-wider uppercase bg-[#FF4B72]/10 px-2.5 py-1 rounded-md">
                 @{result.authorName}
               </span>
               <a
@@ -93,45 +171,103 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                 href={result.authorUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-[#FF4B72] transition-colors"
-                title="Visit TikTok Creator Profile"
+                className="text-gray-400 hover:text-[#FF4B72] transition-colors p-1"
+                title="Lihat Profil TikTok"
               >
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-4 h-4" />
               </a>
             </div>
 
-            {/* Video description */}
+            {/* Video / Post description */}
             <h2 
               id="result-video-title"
-              className="font-sans font-extrabold text-lg md:text-xl text-[#1A1A1A] leading-tight mb-2"
+              className="font-sans font-extrabold text-lg md:text-xl text-[#1A1A1A] leading-snug line-clamp-2 mb-2"
             >
               {result.title}
             </h2>
-            <p className="font-sans font-normal text-sm text-gray-500 leading-relaxed">
-              Video is processed successfully. You can download either the high-definition video track or the isolated background audio.
+            <p className="font-sans text-xs md:text-sm text-gray-500 leading-relaxed">
+              {isPhotoPost 
+                ? "Postingan slide foto TikTok siap diunduh dalam resolusi asli tanpa watermark."
+                : "Video berhasil diproses dalam kualitas tinggi tanpa tanda air (no watermark)."}
             </p>
           </div>
 
-          <div className="flex flex-col gap-3.5 w-full">
-            {/* Primary Download (MP4) */}
-            <button
-              id="btn-download-mp4"
-              onClick={() => handleDownload(result.downloadMp4, "mp4")}
-              className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-gradient-to-r from-[#FF4B72] to-[#FF7043] text-white font-sans font-bold text-sm tracking-wide shadow-md hover:opacity-95 active:scale-98 transition-all cursor-pointer"
-            >
-              <Film className="w-4.5 h-4.5" />
-              <span>{t.downloadMp4Label}</span>
-            </button>
+          {/* Photo Slides Thumbnails Strip (If Photo Post) */}
+          {isPhotoPost && result.images && result.images.length > 1 && (
+            <div className="flex flex-col gap-2">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Pilih Foto:</span>
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                {result.images.map((imgUrl, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedPhotoIndex(i)}
+                    className={`relative w-14 h-14 rounded-xl overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
+                      selectedPhotoIndex === i ? "border-[#FF4B72] scale-105 shadow-md" : "border-gray-200 opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    <img src={imgUrl} alt={`Thumb ${i+1}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
-            {/* Secondary Download (MP3) */}
-            <button
-              id="btn-download-mp3"
-              onClick={() => handleDownload(result.downloadMp3, "mp3")}
-              className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl border-2 border-[#FF4B72] text-[#FF4B72] font-sans font-bold text-sm tracking-wide bg-transparent hover:bg-[#FF4B72]/5 active:scale-98 transition-all cursor-pointer"
-            >
-              <Music className="w-4.5 h-4.5" />
-              <span>{t.downloadMp3Label}</span>
-            </button>
+          {/* Action Buttons */}
+          <div className="flex flex-col gap-3 w-full">
+            {isPhotoPost && result.images && result.images.length > 0 ? (
+              // PHOTO DOWNLOAD ACTIONS
+              <>
+                <button
+                  id="btn-download-selected-photo"
+                  data-testid="btn-download-photo"
+                  onClick={() => handleDownload(result.images![selectedPhotoIndex], "photo", selectedPhotoIndex)}
+                  className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF4B72] to-[#FF7043] text-white font-sans font-bold text-sm tracking-wide shadow-md hover:opacity-95 active:scale-98 transition-all cursor-pointer"
+                >
+                  <Download className="w-4.5 h-4.5" />
+                  <span>
+                    {downloadingIndex === selectedPhotoIndex ? "Mengunduh..." : `${t.downloadSinglePhoto} #${selectedPhotoIndex + 1}`}
+                  </span>
+                </button>
+
+                {result.images.length > 1 && (
+                  <button
+                    id="btn-download-all-photos"
+                    data-testid="btn-download-all-photos"
+                    onClick={handleDownloadAllPhotos}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-[#FF4B72] text-[#FF4B72] font-sans font-bold text-sm tracking-wide bg-transparent hover:bg-[#FF4B72]/5 active:scale-98 transition-all cursor-pointer"
+                  >
+                    <ImageIcon className="w-4.5 h-4.5" />
+                    <span>{t.downloadAllPhotos} ({result.images.length})</span>
+                  </button>
+                )}
+              </>
+            ) : (
+              // VIDEO DOWNLOAD ACTIONS
+              result.downloadMp4 && (
+                <button
+                  id="btn-download-mp4"
+                  data-testid="btn-download-mp4"
+                  onClick={() => handleDownload(result.downloadMp4!, "video")}
+                  className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-gradient-to-r from-[#FF4B72] to-[#FF7043] text-white font-sans font-bold text-sm tracking-wide shadow-md hover:opacity-95 active:scale-98 transition-all cursor-pointer"
+                >
+                  <Film className="w-4.5 h-4.5" />
+                  <span>{t.downloadMp4Label}</span>
+                </button>
+              )
+            )}
+
+            {/* AUDIO DOWNLOAD ACTION (Available for both video and photo posts) */}
+            {result.downloadMp3 && (
+              <button
+                id="btn-download-mp3"
+                data-testid="btn-download-mp3"
+                onClick={() => handleDownload(result.downloadMp3!, "audio")}
+                className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border border-gray-200 text-gray-700 font-sans font-semibold text-sm tracking-wide bg-gray-50 hover:bg-gray-100 active:scale-98 transition-all cursor-pointer"
+              >
+                <Music className="w-4.5 h-4.5 text-[#FF7043]" />
+                <span>{t.downloadMp3Label}</span>
+              </button>
+            )}
           </div>
         </div>
       </div>

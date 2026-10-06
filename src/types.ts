@@ -1,15 +1,22 @@
 export type Language = "ID" | "EN" | "ES";
 
-export interface VideoResult {
+export type MediaType = "video" | "photo";
+
+export interface MediaResult {
   id: string;
   title: string;
   authorName: string;
   authorUrl: string;
   thumbnailUrl: string;
   duration: string;
-  downloadMp4: string;
-  downloadMp3: string;
+  mediaType: MediaType;
+  downloadMp4?: string;
+  downloadMp3?: string;
+  images?: string[];
 }
+
+// Backward compatibility alias
+export type VideoResult = MediaResult;
 
 export interface FAQItem {
   id: string;
@@ -30,6 +37,10 @@ export interface TranslationSet {
   downloadResults: string;
   downloadMp4Label: string;
   downloadMp3Label: string;
+  downloadPhotosLabel: string;
+  downloadSinglePhoto: string;
+  downloadAllPhotos: string;
+  photoSlideCount: string;
   downloadAnother: string;
   howToDownloadTitle: string;
   faqTitle: string;

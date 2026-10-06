@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Clipboard, ArrowRight, X, AlertCircle } from "lucide-react";
+import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, Music, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import Header from "./components/Header";
@@ -9,7 +9,7 @@ import ProcessingSkeleton from "./components/ProcessingSkeleton";
 import DownloadCard from "./components/DownloadCard";
 import LegalModal from "./components/LegalModals";
 
-import { Language, VideoResult } from "./types";
+import { Language, MediaResult } from "./types";
 import { translations } from "./translations";
 
 export default function App() {
@@ -21,7 +21,7 @@ export default function App() {
   const [urlInput, setUrlInput] = useState("");
   const [status, setStatus] = useState<"idle" | "processing" | "success" | "error">("idle");
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [videoResult, setVideoResult] = useState<VideoResult | null>(null);
+  const [videoResult, setVideoResult] = useState<MediaResult | null>(null);
 
   // 3. Legal Modals states
   const [activeLegal, setActiveLegal] = useState<"privacy" | "terms" | "disclaimer" | null>(null);
@@ -187,6 +187,27 @@ export default function App() {
           >
             {t.subTagline}
           </motion.p>
+
+          {/* Media Format Badges - Anti-AI-Slop Tactile Navigation Pills */}
+          <motion.div 
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="flex flex-wrap items-center justify-center gap-2 mt-2"
+          >
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF4B72]/10 text-[#FF4B72] border border-[#FF4B72]/20 shadow-xs">
+              <Film className="w-3.5 h-3.5" />
+              <span>Video MP4 HD</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20 shadow-xs">
+              <ImageIcon className="w-3.5 h-3.5" />
+              <span>Foto / Slide</span>
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#FF7043]/10 text-[#FF7043] border border-[#FF7043]/20 shadow-xs">
+              <Music className="w-3.5 h-3.5" />
+              <span>Audio MP3</span>
+            </span>
+          </motion.div>
         </div>
 
         {/* Interactive URL Form Section */}
@@ -198,6 +219,7 @@ export default function App() {
             
             <input
               id="tiktok-url-input"
+              data-testid="url-input"
               type="text"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
@@ -214,11 +236,12 @@ export default function App() {
             {urlInput && (
               <button
                 id="btn-clear-input"
+                data-testid="btn-clear"
                 onClick={() => {
                   setUrlInput("");
                   setValidationError(null);
                 }}
-                className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -228,6 +251,7 @@ export default function App() {
           <div className="flex flex-col md:flex-row gap-3 w-full">
             <button
               id="btn-paste-link"
+              data-testid="btn-paste"
               onClick={handlePaste}
               className="w-full md:w-[30%] min-h-[56px] md:h-16 flex items-center justify-center gap-2 border-2 border-[#FF4B72] text-[#FF4B72] bg-white rounded-xl font-sans font-bold text-base hover:bg-[#FF4B72]/10 active:scale-95 transition-all cursor-pointer shadow-sm"
             >
@@ -237,6 +261,7 @@ export default function App() {
 
             <button
               id="btn-submit-download"
+              data-testid="btn-download"
               onClick={handleProcessUrl}
               className="w-full md:w-[70%] min-h-[56px] md:h-16 flex items-center justify-center gap-2 bg-gradient-to-r from-[#FF4B72] to-[#FF7043] text-white rounded-xl font-sans font-bold text-base hover:opacity-95 active:scale-95 transition-all shadow-md cursor-pointer"
             >
@@ -250,6 +275,7 @@ export default function App() {
             {validationError && (
               <motion.div
                 id="form-error-block"
+                data-testid="error-message"
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -5 }}
