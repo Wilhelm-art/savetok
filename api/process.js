@@ -57,7 +57,7 @@ export default async function handler(req, res) {
 
     // LEVEL 2: TikWM API (Supports HD video, slide photos, audio)
     try {
-      const tikwmUrl = `https://api.tikwm.com/api/?url=${encodeURIComponent(trimmedUrl)}&hd=1`;
+      const tikwmUrl = `https://www.tikwm.com/api/?url=${encodeURIComponent(trimmedUrl)}&hd=1`;
       const tikwmRes = await fetch(tikwmUrl);
 
       if (tikwmRes.ok) {
@@ -92,22 +92,26 @@ export default async function handler(req, res) {
     }
 
     // LEVEL 3: Graceful fallback via TikTok oEmbed
-    const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(trimmedUrl)}`;
-    const oembedRes = await fetch(oembedUrl);
-    if (oembedRes.ok) {
-      const odata = await oembedRes.json();
-      return res.status(200).json({
-        id: String(Date.now()),
-        title: odata.title || 'TikTok Media',
-        authorName: odata.author_name || 'tiktok_creator',
-        authorUrl: odata.author_url || 'https://www.tiktok.com',
-        thumbnailUrl: odata.thumbnail_url || 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=720&h=1280&auto=format&fit=crop&q=80',
-        duration: '00:15',
-        mediaType: 'video',
-        downloadMp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-        downloadMp3: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-        images: []
-      });
+    try {
+      const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(trimmedUrl)}`;
+      const oembedRes = await fetch(oembedUrl);
+      if (oembedRes.ok) {
+        const odata = await oembedRes.json();
+        return res.status(200).json({
+          id: String(Date.now()),
+          title: odata.title || 'TikTok Media',
+          authorName: odata.author_name || 'tiktok_creator',
+          authorUrl: odata.author_url || 'https://www.tiktok.com',
+          thumbnailUrl: odata.thumbnail_url || 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=720&h=1280&auto=format&fit=crop&q=80',
+          duration: '00:15',
+          mediaType: 'video',
+          downloadMp4: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+          downloadMp3: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+          images: []
+        });
+      }
+    } catch (oembedErr) {
+      console.warn('oEmbed fallback parsing failed:', oembedErr.message || oembedErr);
     }
 
     return res.status(400).json({ error: 'Gagal memproses media dari tautan ini. Pastikan video atau postingan bersifat publik.' });
