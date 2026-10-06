@@ -78,36 +78,24 @@ export default function App() {
         document.getElementById("dynamic-content-state-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 50);
 
-      // Use RapidAPI TikTok Video No Watermark endpoint for 100% reliable fetching
-      const response = await fetch(`https://tiktok-video-no-watermark2.p.rapidapi.com/?url=${encodeURIComponent(urlInput)}`, {
-        method: "GET",
+      // Process TikTok URL securely via backend endpoint (protects API keys)
+      const response = await fetch("/api/process", {
+        method: "POST",
         headers: {
-          "Accept": "application/json",
-          "x-rapidapi-host": "tiktok-video-no-watermark2.p.rapidapi.com",
-          "x-rapidapi-key": "b147c13cbamshc23e106d8b0378ep1f58c6jsne1ae9647adb1"
-        }
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ url: urlInput })
       });
 
       const data = await response.json();
 
-      if (!response.ok || data.code !== 0) {
-        setValidationError(data.msg || data.error || t.errorInvalid);
+      if (!response.ok || data.error) {
+        setValidationError(data.error || t.errorInvalid);
         setStatus("error");
         return;
       }
 
-      // Success payload received from RapidAPI
-      const tikData = data.data;
-      setVideoResult({
-        id: tikData.id,
-        title: tikData.title || `Video by ${tikData.author?.nickname || "Creator"}`,
-        authorName: tikData.author?.unique_id || "tiktok_creator",
-        authorUrl: `https://www.tiktok.com/@${tikData.author?.unique_id || ""}`,
-        thumbnailUrl: tikData.cover,
-        duration: tikData.duration ? Math.floor(tikData.duration / 60) + ":" + (tikData.duration % 60).toString().padStart(2, '0') : "00:00",
-        downloadMp4: tikData.hdplay || tikData.play,
-        downloadMp3: tikData.music
-      });
+      setVideoResult(data);
       setStatus("success");
       
       // Auto-scroll to the result card so mobile users see the download buttons immediately
