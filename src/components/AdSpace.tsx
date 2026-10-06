@@ -7,7 +7,7 @@ interface AdProps {
 }
 
 // Separate component that only mounts when visible
-function AdSenseBlock({ className = "", format = "horizontal", style = {} }: { className?: string, format?: string, style?: any }) {
+function AdSenseBlock({ className = "", format = "auto", style = {} }: { className?: string, format?: string, style?: any }) {
   const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "200px 0px" });
 
   useEffect(() => {
@@ -24,18 +24,18 @@ function AdSenseBlock({ className = "", format = "horizontal", style = {} }: { c
   }, [inView]);
 
   return (
-    <div ref={ref} className={`w-full flex items-center justify-center overflow-hidden ${className}`}>
+    <div ref={ref} className={`w-full min-h-[90px] flex items-center justify-center overflow-hidden ${className}`}>
       {inView ? (
         <ins 
           className="adsbygoogle"
-          style={{ display: "block", ...style }}
+          style={{ display: "block", minHeight: "90px", width: "100%", ...style }}
           data-ad-client="ca-pub-4420868155954120"
           data-ad-slot="auto"
           data-ad-format={format}
           data-full-width-responsive="true"
         ></ins>
       ) : (
-        <div className="w-full h-full bg-gray-50/50 animate-pulse rounded-xl"></div>
+        <div className="w-full h-[90px] bg-gray-50/50 rounded-xl" />
       )}
     </div>
   );
@@ -47,7 +47,7 @@ export function TopBannerAd({ className = "" }: AdProps) {
       id="adsense-top-banner"
       className={`w-full max-w-[728px] min-h-[90px] mx-auto flex items-center justify-center overflow-hidden ${className}`}
     >
-       <AdSenseBlock style={{ width: "100%", height: "90px" }} />
+       <AdSenseBlock />
     </div>
   );
 }
@@ -58,7 +58,18 @@ export function CardBaseAd({ className = "" }: AdProps) {
       id="adsense-card-base-banner"
       className={`w-full max-w-[680px] min-h-[90px] mx-auto flex items-center justify-center overflow-hidden ${className}`}
     >
-      <AdSenseBlock style={{ width: "100%", height: "90px" }} />
+      <AdSenseBlock />
+    </div>
+  );
+}
+
+export function MidContentAd({ className = "" }: AdProps) {
+  return (
+    <div 
+      id="adsense-mid-content-banner"
+      className={`w-full max-w-[728px] min-h-[90px] mx-auto flex items-center justify-center overflow-hidden my-6 ${className}`}
+    >
+      <AdSenseBlock />
     </div>
   );
 }

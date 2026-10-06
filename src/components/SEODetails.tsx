@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Copy, Clipboard, CheckCircle2, ChevronDown, ChevronUp, HelpCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { TranslationSet } from "../types";
+import { MidContentAd } from "./AdSpace";
 
 interface SEODetailsProps {
   t: TranslationSet;
@@ -201,10 +202,28 @@ export default function SEODetails({ t }: SEODetailsProps) {
                 </p>
               </div>
             </div>
+
+            {/* Photo Slideshow & Audio SEO Feature Highlight */}
+            <div className="bg-gradient-to-r from-pink-50/60 to-orange-50/60 p-6 md:p-8 rounded-3xl border border-pink-100/60 mt-4 flex flex-col md:flex-row gap-6 items-center">
+              <div className="flex-1 flex flex-col gap-3 text-left">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#FF4B72] bg-white px-3 py-1 rounded-full w-fit shadow-xs">
+                  Fitur Unggulan Baru
+                </span>
+                <h3 className="font-sans font-bold text-xl md:text-2xl text-[#1A1A1A]">
+                  Download Slide Foto TikTok & Ekstrak MP3 Tanpa Watermark
+                </h3>
+                <p className="font-sans text-gray-600 text-sm md:text-base leading-relaxed">
+                  Bukan hanya video MP4! <strong>SaveTok</strong> juga berfungsi sebagai <strong>pengunduh slide foto TikTok</strong> (photo carousel). Dapatkan semua gambar dari postingan slide TikTok dalam resolusi HD asli, serta simpan sound atau lagu latar belakangnya ke file MP3 berkualitas jernih.
+                </p>
+              </div>
+            </div>
           </div>
 
         </div>
       </section>
+
+      {/* Responsive Mid-Content Ad Placement before FAQ */}
+      <MidContentAd />
 
       {/* Divider line */}
       <hr className="w-full border-gray-100 max-w-4xl mx-auto" />

@@ -61,6 +61,16 @@ export const translations: TranslationsMap = {
         id: "faq6",
         question: "Bagaimana cara download video TT di iPhone (iOS)?",
         answer: "Untuk pengguna iPhone (iOS 13+), kamu dapat mengunduh langsung menggunakan browser Safari. Cukup salin tautan, tempel di SaveTok, tekan unduh, lalu file akan masuk ke manajer unduhan Safari kamu."
+      },
+      {
+        id: "faq7",
+        question: "Bisakah saya download slide foto / gambar dari TikTok?",
+        answer: "Bisa! SaveTok mendukung penuh unduhan postingan slide foto atau carousel TikTok. Anda dapat mengunduh foto satu per satu dalam resolusi HD asli tanpa watermark atau klik 'Unduh Semua Foto' sekaligus."
+      },
+      {
+        id: "faq8",
+        question: "Bagaimana cara download audio MP3 atau sound TikTok?",
+        answer: "Cukup tempel tautan video atau slide TikTok di SaveTok, lalu klik tombol 'Download MP3 (Audio Hanya)'. File audio akan otomatis tersimpan dengan kualitas suara jernih."
       }
     ]
   },
@@ -97,8 +107,8 @@ export const translations: TranslationsMap = {
     faqs: [
       {
         id: "faq1",
-        question: "Is it free to use SaveTok?",
-        answer: "Yes! SaveTok is completely free to use for downloading videos and audio without any subscription fees or hidden charges."
+        question: "Is it free to use SaveTok to download TikTok videos?",
+        answer: "Yes! SaveTok is completely free to use for downloading videos, photo slides, and MP3 audio without any subscription fees or hidden charges."
       },
       {
         id: "faq2",
@@ -107,8 +117,18 @@ export const translations: TranslationsMap = {
       },
       {
         id: "faq3",
-        question: "Do I need to install any software?",
-        answer: "No, you do not need to install any software, applications, or browser extensions. SaveTok works entirely online in your web browser."
+        question: "Do I need to install any software to save from TikTok?",
+        answer: "No, you do not need to install any software, applications, or browser extensions. SaveTok works entirely online in your web browser across PC, Android, and iOS."
+      },
+      {
+        id: "faq4",
+        question: "Can I download TikTok photo slides and carousels?",
+        answer: "Yes! SaveTok fully supports downloading TikTok photo slideshow posts. You can download individual pictures in original HD resolution without watermarks or save all photos with one click."
+      },
+      {
+        id: "faq5",
+        question: "How to download TikTok audio or MP3 music?",
+        answer: "Simply paste the TikTok link and click 'Download MP3 (Audio Only)' to extract high-quality crystal-clear audio from the video or slideshow."
       }
     ]
   },
@@ -157,6 +177,16 @@ export const translations: TranslationsMap = {
         id: "faq3",
         question: "¿Necesito instalar algún software?",
         answer: "No, no necesitas instalar ningún software, aplicación ni extensión de navegador. SaveTok funciona directamente en tu navegador web."
+      },
+      {
+        id: "faq4",
+        question: "¿Puedo descargar diapositivas o fotos de TikTok?",
+        answer: "¡Sí! SaveTok es totalmente compatible con la descarga de publicaciones de fotos y carruseles de TikTok en calidad HD original sin marcas de agua."
+      },
+      {
+        id: "faq5",
+        question: "¿Cómo descargar música o audio MP3 de TikTok?",
+        answer: "Simplemente pega el enlace de TikTok y haz clic en 'Descargar MP3 (Solo Audio)' para obtener la pista musical con máxima fidelidad."
       }
     ]
   }

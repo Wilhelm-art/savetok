@@ -15,6 +15,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
   const isPhotoPost = result.mediaType === "photo" && Array.isArray(result.images) && result.images.length > 0;
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
   const [downloadingIndex, setDownloadingIndex] = useState<number | null>(null);
+  const [downloadingAllProgress, setDownloadingAllProgress] = useState<string | null>(null);
 
   // Safe helper to trigger standard browser file downloads through our secure proxy
   const handleDownload = (downloadUrl: string, type: "video" | "photo" | "audio", customIndex?: number) => {
@@ -38,9 +39,14 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
   // Download all photos sequentially with slight delay to prevent browser download flood block
   const handleDownloadAllPhotos = () => {
     if (!result.images || result.images.length === 0) return;
+    const total = result.images.length;
     result.images.forEach((imgUrl, idx) => {
       setTimeout(() => {
+        setDownloadingAllProgress(`${idx + 1}/${total}`);
         handleDownload(imgUrl, "photo", idx);
+        if (idx === total - 1) {
+          setTimeout(() => setDownloadingAllProgress(null), 2000);
+        }
       }, idx * 400);
     });
   };
@@ -234,10 +240,15 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                     id="btn-download-all-photos"
                     data-testid="btn-download-all-photos"
                     onClick={handleDownloadAllPhotos}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-[#FF4B72] text-[#FF4B72] font-sans font-bold text-sm tracking-wide bg-transparent hover:bg-[#FF4B72]/5 active:scale-98 transition-all cursor-pointer"
+                    disabled={!!downloadingAllProgress}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-[#FF4B72] text-[#FF4B72] font-sans font-bold text-sm tracking-wide bg-transparent hover:bg-[#FF4B72]/5 active:scale-98 transition-all cursor-pointer disabled:opacity-70"
                   >
                     <ImageIcon className="w-4.5 h-4.5" />
-                    <span>{t.downloadAllPhotos} ({result.images.length})</span>
+                    <span>
+                      {downloadingAllProgress 
+                        ? `Mengunduh (${downloadingAllProgress})...` 
+                        : `${t.downloadAllPhotos} (${result.images.length})`}
+                    </span>
                   </button>
                 )}
               </>
