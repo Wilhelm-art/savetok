@@ -15,9 +15,6 @@ export interface MediaResult {
   images?: string[];
 }
 
-// Backward compatibility alias
-export type VideoResult = MediaResult;
-
 export interface FAQItem {
   id: string;
   question: string;
@@ -25,19 +22,14 @@ export interface FAQItem {
 }
 
 export interface TranslationSet {
-  brandName: string;
-  tagline: string;
   subTagline: string;
   inputPlaceholder: string;
   buttonPaste: string;
   buttonDownload: string;
   exampleLabel: string;
   processingTitle: string;
-  processingSubtitle: string;
-  downloadResults: string;
   downloadMp4Label: string;
   downloadMp3Label: string;
-  downloadPhotosLabel: string;
   downloadSinglePhoto: string;
   downloadAllPhotos: string;
   photoSlideCount: string;

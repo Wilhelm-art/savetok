@@ -1,4 +1,4 @@
-import { Film, Sparkles } from "lucide-react";
+import { Film } from "lucide-react";
 import { motion } from "motion/react";
 import { TranslationSet } from "../types";
 

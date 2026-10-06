@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, Music, Sparkles } from "lucide-react";
+import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, Music } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import Header from "./components/Header";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Film, Music, ArrowLeft, ExternalLink, Image as ImageIcon, Download, ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
+import { Film, Music, ArrowLeft, ExternalLink, Image as ImageIcon, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { MediaResult, TranslationSet } from "../types";
 import { CardBaseAd } from "./AdSpace";

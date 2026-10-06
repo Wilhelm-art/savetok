@@ -1,6 +1,4 @@
 import { useEffect } from "react";
-import { Suspense, lazy } from "react";
-import { Sparkles } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 
 interface AdProps {
