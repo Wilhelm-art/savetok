@@ -131,4 +131,40 @@ test.describe('SaveTok End-to-End User Journeys', () => {
     await expect(errorMsg).toContainText('Server sedang sibuk');
   });
 
+  test('Journey 7: Sub-Page Keyword Routes & Educational Guides', async ({ appPage }) => {
+    // Navigate to /mp3 via Header
+    const mp3Link = appPage.locator('#header-nav-mp3');
+    await mp3Link.click();
+    await expect(appPage.locator('#hero-title')).toContainText('Download Lagu & Sound TikTok');
+    await expect(appPage.locator('[data-testid="url-input"]')).toHaveAttribute('placeholder', /ekstrak MP3/);
+
+    // Navigate to /foto
+    const fotoLink = appPage.locator('#header-nav-foto');
+    await fotoLink.click();
+    await expect(appPage.locator('#hero-title')).toContainText('Download Foto Slide TikTok');
+
+    // Verify Educational Guides Section is rendered
+    const guidesSection = appPage.locator('#guides-section');
+    await expect(guidesSection).toBeVisible();
+    await expect(guidesSection).toContainText('Pusat Panduan & Edukasi');
+  });
+
+  test('Journey 8: Photo Slide Carousel ZIP Button Presence', async ({ appPage, mockPhotoApi }) => {
+    await mockPhotoApi();
+
+    const input = appPage.locator('[data-testid="url-input"]');
+    const submitBtn = appPage.locator('[data-testid="btn-download"]');
+
+    await input.fill('https://www.tiktok.com/@photo_creator/video/79876543210');
+    await submitBtn.click();
+
+    const downloadCard = appPage.locator('[data-testid="download-card"]');
+    await expect(downloadCard).toBeVisible({ timeout: 10000 });
+
+    const zipBtn = appPage.locator('[data-testid="btn-download-zip"]');
+    await expect(zipBtn).toBeVisible();
+    await expect(zipBtn).toContainText('.ZIP');
+  });
+
 });
+

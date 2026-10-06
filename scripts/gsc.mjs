@@ -115,6 +115,18 @@ export async function getSitemaps(siteUrl = 'sc-domain:savetok.web.id') {
   return await res.json();
 }
 
+export async function submitSitemap(feedpath = 'https://savetok.web.id/sitemap.xml', siteUrl = 'sc-domain:savetok.web.id') {
+  const token = await getValidAccessToken();
+  const res = await fetch(`https://www.googleapis.com/webmasters/v3/sites/${encodeURIComponent(siteUrl)}/sitemaps/${encodeURIComponent(feedpath)}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  if (res.status === 204 || res.ok) {
+    return { success: true, message: `Sitemap ${feedpath} submitted successfully.` };
+  }
+  return await res.json();
+}
+
 // CLI handler
 if (process.argv[1] && process.argv[1].endsWith('gsc.mjs')) {
   const cmd = process.argv[2] || 'inspect';
@@ -133,8 +145,13 @@ if (process.argv[1] && process.argv[1].endsWith('gsc.mjs')) {
         console.log('Fetching Sitemaps...');
         const result = await getSitemaps();
         console.log(JSON.stringify(result, null, 2));
+      } else if (cmd === 'submit-sitemap') {
+        const feedpath = process.argv[3] || 'https://savetok.web.id/sitemap.xml';
+        console.log(`Submitting Sitemap: ${feedpath}...`);
+        const result = await submitSitemap(feedpath);
+        console.log(JSON.stringify(result, null, 2));
       } else {
-        console.log('Available commands: inspect [url], stats, sitemaps');
+        console.log('Available commands: inspect [url], stats, sitemaps, submit-sitemap [url]');
       }
     } catch (err) {
       console.error('GSC Error:', err.message);

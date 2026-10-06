@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "motion/react";
 import Header from "./components/Header";
 import { TopBannerAd } from "./components/AdSpace";
 import SEODetails from "./components/SEODetails";
+import GuidesSection from "./components/GuidesSection";
 import ProcessingSkeleton from "./components/ProcessingSkeleton";
 import DownloadCard from "./components/DownloadCard";
 import LegalModal from "./components/LegalModals";
@@ -12,10 +13,171 @@ import LegalModal from "./components/LegalModals";
 import { Language, MediaResult } from "./types";
 import { translations } from "./translations";
 
+function getRouteHero(route: string, lang: Language, t: typeof translations[Language]) {
+  const norm = route.replace(/\/+$/, "") || "/";
+  if (norm === "/mp3") {
+    if (lang === "ID") {
+      return {
+        title: (
+          <>
+            Download Lagu &amp; Sound TikTok<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Audio MP3 Jernih.</span>
+          </>
+        ),
+        subtitle: "Ekstrak dan simpan audio lagu viral TikTok ke format MP3 320kbps tanpa watermark, cepat dan gratis.",
+        placeholder: "Tempel tautan video TikTok untuk ekstrak MP3..."
+      };
+    } else if (lang === "ES") {
+      return {
+        title: (
+          <>
+            Descargar Música de TikTok<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Audio MP3 Alta Calidad.</span>
+          </>
+        ),
+        subtitle: "Extrae y guarda audios virales de TikTok en formato MP3 320kbps sin marca de agua.",
+        placeholder: "Pega el enlace de TikTok para descargar MP3..."
+      };
+    } else {
+      return {
+        title: (
+          <>
+            Download TikTok Audio &amp; Sounds<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Crystal Clear MP3.</span>
+          </>
+        ),
+        subtitle: "Extract and save viral TikTok background music and sounds to 320kbps MP3 without watermark.",
+        placeholder: "Paste TikTok URL to extract MP3 audio..."
+      };
+    }
+  }
+
+  if (norm === "/foto") {
+    if (lang === "ID") {
+      return {
+        title: (
+          <>
+            Download Foto Slide TikTok<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Carousel HD &amp; File ZIP.</span>
+          </>
+        ),
+        subtitle: "Unduh semua foto carousel TikTok resolusi asli tanpa watermark, tersedia fitur paket ZIP satu klik.",
+        placeholder: "Tempel tautan foto/carousel TikTok..."
+      };
+    } else if (lang === "ES") {
+      return {
+        title: (
+          <>
+            Descargar Fotos de TikTok<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Carrusel HD y ZIP.</span>
+          </>
+        ),
+        subtitle: "Descarga todas las fotos de carrusel de TikTok en calidad original sin marca de agua.",
+        placeholder: "Pega el enlace de carrusel de fotos..."
+      };
+    } else {
+      return {
+        title: (
+          <>
+            Download TikTok Photo Slides<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">HD Carousel &amp; ZIP Archive.</span>
+          </>
+        ),
+        subtitle: "Save all photo carousel slides in full HD quality without watermark with 1-click ZIP archive.",
+        placeholder: "Paste TikTok photo carousel URL..."
+      };
+    }
+  }
+
+  if (norm === "/story") {
+    if (lang === "ID") {
+      return {
+        title: (
+          <>
+            Download Story TikTok<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Tanpa Watermark HD.</span>
+          </>
+        ),
+        subtitle: "Simpan story TikTok favorit sebelum kedaluwarsa 24 jam dengan resolusi video HD jernih.",
+        placeholder: "Tempel tautan story TikTok..."
+      };
+    } else if (lang === "ES") {
+      return {
+        title: (
+          <>
+            Descargar Historias de TikTok<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Sin Marca de Agua HD.</span>
+          </>
+        ),
+        subtitle: "Guarda historias de TikTok antes de que desaparezcan en 24 horas.",
+        placeholder: "Pega el enlace de historia de TikTok..."
+      };
+    } else {
+      return {
+        title: (
+          <>
+            Download TikTok Stories<br/>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Without Watermark HD.</span>
+          </>
+        ),
+        subtitle: "Save temporary TikTok stories in original HD quality before they expire after 24 hours.",
+        placeholder: "Paste TikTok story URL..."
+      };
+    }
+  }
+
+  // Default / or /panduan
+  return {
+    title: lang === "ID" ? (
+      <>
+        Download Video TikTok<br/>
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Tanpa Watermark.</span>
+      </>
+    ) : lang === "ES" ? (
+      <>
+        Descargar Videos de TikTok<br/>
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">al Instante y Gratis.</span>
+      </>
+    ) : (
+      <>
+        TikTok Video Downloader<br/>
+        <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Without Watermark.</span>
+      </>
+    ),
+    subtitle: t.subTagline,
+    placeholder: t.inputPlaceholder
+  };
+}
+
 export default function App() {
   // 1. Multilingual State - Indonesian is the default, supported by EN and ES
   const [language, setLanguage] = useState<Language>("ID");
   const t = translations[language];
+
+  // Route state for sub-landing pages (/mp3, /foto, /story, /panduan)
+  const [currentRoute, setCurrentRoute] = useState<string>(() => window.location.pathname || "/");
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentRoute(window.location.pathname || "/");
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  const navigateTo = (route: string) => {
+    window.history.pushState({}, "", route);
+    setCurrentRoute(route);
+    if (route === "/panduan") {
+      setTimeout(() => {
+        document.getElementById("guides-section")?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const routeHero = getRouteHero(currentRoute, language, t);
 
   // 2. Interactive Input States
   const [urlInput, setUrlInput] = useState("");
@@ -141,7 +303,12 @@ export default function App() {
       </script>
 
       {/* Modular Navigation Header */}
-      <Header currentLanguage={language} onLanguageChange={setLanguage} />
+      <Header 
+        currentLanguage={language} 
+        onLanguageChange={setLanguage} 
+        currentRoute={currentRoute}
+        onNavigate={navigateTo}
+      />
 
       {/* Top Margin spacer to account for fixed Header */}
       <div className="h-20 shrink-0" />
@@ -161,22 +328,7 @@ export default function App() {
             transition={{ duration: 0.5 }}
             className="font-sans font-black text-4xl md:text-6xl text-[#1A1A1A] tracking-tighter leading-tight"
           >
-            {language === "ID" ? (
-              <>
-                Download Video TikTok<br/>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Tanpa Watermark.</span>
-              </>
-            ) : language === "ES" ? (
-              <>
-                Descargar Videos de TikTok<br/>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">al Instante y Gratis.</span>
-              </>
-            ) : (
-              <>
-                TikTok Video Downloader<br/>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#FF4B72] to-[#FF7043]">Without Watermark.</span>
-              </>
-            )}
+            {routeHero.title}
           </motion.h1>
           <motion.p
             id="hero-subtitle"
@@ -185,7 +337,7 @@ export default function App() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="font-sans font-medium text-base md:text-lg text-gray-500 max-w-xl mx-auto mt-2"
           >
-            {t.subTagline}
+            {routeHero.subtitle}
           </motion.p>
 
           {/* Media Format Badges - Anti-AI-Slop Tactile Navigation Pills */}
@@ -224,7 +376,7 @@ export default function App() {
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleProcessUrl()}
-              placeholder={t.inputPlaceholder}
+              placeholder={routeHero.placeholder}
               className={`w-full h-16 md:h-20 pl-14 pr-12 rounded-2xl bg-[#FF4B72]/5 border-2 text-base md:text-lg text-[#1C1B1B] placeholder:text-gray-400 outline-none focus:ring-0 transition-all ${
                 validationError 
                   ? "border-[#D32F2F] focus:border-[#D32F2F] shadow-[0_0_0_4px_rgba(211,47,47,0.1)]" 
@@ -345,6 +497,9 @@ export default function App() {
             )}
           </AnimatePresence>
         </div>
+
+        {/* In-depth Editorial Guides & Articles for SEO / AdSense Value */}
+        <GuidesSection />
 
         {/* Below the fold SEO section containing tutorial cards and collapsible FAQ accordion */}
         <SEODetails t={t} />

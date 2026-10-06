@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Film, Music, ArrowLeft, ExternalLink, Image as ImageIcon, Download, ChevronLeft, ChevronRight } from "lucide-react";
+import { Film, Music, ArrowLeft, ExternalLink, Image as ImageIcon, Download, ChevronLeft, ChevronRight, FolderArchive } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import JSZip from "jszip";
 import { MediaResult, TranslationSet } from "../types";
 import { CardBaseAd } from "./AdSpace";
 
@@ -49,6 +50,48 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
         }
       }, idx * 400);
     });
+  };
+
+  // Client-side ZIP packaging of all HD slide photos using JSZip
+  const [isZipping, setIsZipping] = useState(false);
+  const [zipProgress, setZipProgress] = useState<string | null>(null);
+
+  const handleDownloadZip = async () => {
+    if (!result.images || result.images.length === 0) return;
+    setIsZipping(true);
+    setZipProgress(`0/${result.images.length}`);
+
+    try {
+      const zip = new JSZip();
+      const folder = zip.folder(`SaveTok_${result.id}`) || zip;
+      const total = result.images.length;
+
+      for (let i = 0; i < total; i++) {
+        setZipProgress(`${i + 1}/${total}`);
+        const proxyUrl = `/api/download?type=photo&id=${encodeURIComponent(result.id)}_${i + 1}&url=${encodeURIComponent(result.images[i])}`;
+        const res = await fetch(proxyUrl);
+        if (res.ok) {
+          const arrayBuf = await res.arrayBuffer();
+          folder.file(`SaveTok_Photo_${i + 1}.jpg`, arrayBuf);
+        }
+      }
+
+      setZipProgress("Mengompres...");
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `SaveTok_Photos_${result.id}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      console.error("ZIP packaging failed:", err);
+    } finally {
+      setIsZipping(false);
+      setZipProgress(null);
+    }
   };
 
   return (
@@ -236,20 +279,35 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                 </button>
 
                 {result.images.length > 1 && (
-                  <button
-                    id="btn-download-all-photos"
-                    data-testid="btn-download-all-photos"
-                    onClick={handleDownloadAllPhotos}
-                    disabled={!!downloadingAllProgress}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-[#FF4B72] text-[#FF4B72] font-sans font-bold text-sm tracking-wide bg-transparent hover:bg-[#FF4B72]/5 active:scale-98 transition-all cursor-pointer disabled:opacity-70"
-                  >
-                    <ImageIcon className="w-4.5 h-4.5" />
-                    <span>
-                      {downloadingAllProgress 
-                        ? `Mengunduh (${downloadingAllProgress})...` 
-                        : `${t.downloadAllPhotos} (${result.images.length})`}
-                    </span>
-                  </button>
+                  <>
+                    <button
+                      id="btn-download-all-photos"
+                      data-testid="btn-download-all-photos"
+                      onClick={handleDownloadAllPhotos}
+                      disabled={!!downloadingAllProgress || isZipping}
+                      className="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-[#FF4B72] text-[#FF4B72] font-sans font-bold text-sm tracking-wide bg-transparent hover:bg-[#FF4B72]/5 active:scale-98 transition-all cursor-pointer disabled:opacity-70"
+                    >
+                      <ImageIcon className="w-4.5 h-4.5" />
+                      <span>
+                        {downloadingAllProgress 
+                          ? `Mengunduh (${downloadingAllProgress})...` 
+                          : `${t.downloadAllPhotos} (${result.images.length})`}
+                      </span>
+                    </button>
+
+                    <button
+                      id="btn-download-zip"
+                      data-testid="btn-download-zip"
+                      onClick={handleDownloadZip}
+                      disabled={isZipping || !!downloadingAllProgress}
+                      className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-2xl border border-gray-200 text-gray-700 font-sans font-semibold text-xs md:text-sm tracking-wide bg-gray-50 hover:bg-gray-100 active:scale-98 transition-all cursor-pointer disabled:opacity-70"
+                    >
+                      <FolderArchive className="w-4 h-4 text-[#FF4B72]" />
+                      <span>
+                        {zipProgress ? `Mengemas ZIP (${zipProgress})...` : `Unduh Semua Foto (.ZIP)`}
+                      </span>
+                    </button>
+                  </>
                 )}
               </>
             ) : (
