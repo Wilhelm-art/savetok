@@ -22,6 +22,17 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/\\$1",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ]
 }

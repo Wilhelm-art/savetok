@@ -26,6 +26,18 @@ export default function App() {
   // 3. Legal Modals states
   const [activeLegal, setActiveLegal] = useState<"privacy" | "terms" | "disclaimer" | null>(null);
 
+  // Detect path on load for direct access to legal modals (/privacy, /terms, /disclaimer)
+  useEffect(() => {
+    const path = window.location.pathname.replace(/^\/+|\/+$/g, "").toLowerCase();
+    if (path === "privacy" || path === "privacy-policy") {
+      setActiveLegal("privacy");
+    } else if (path === "terms" || path === "terms-of-service") {
+      setActiveLegal("terms");
+    } else if (path === "disclaimer") {
+      setActiveLegal("disclaimer");
+    }
+  }, []);
+
   // Clear validation state on typing
   useEffect(() => {
     if (validationError) {
@@ -127,7 +139,7 @@ export default function App() {
           "@context": "https://schema.org",
           "@type": "WebApplication",
           "name": "SaveTok",
-          "url": "https://savetok.co",
+          "url": "https://savetok.web.id/",
           "description": "Fast, free, and unlimited TikTok video downloader without watermarks directly to your device.",
           "applicationCategory": "MultimediaApplication",
           "operatingSystem": "All",

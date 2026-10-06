@@ -21,7 +21,7 @@ export default function LegalModal({ type, language, onClose }: LegalModalProps)
           "1. Pengumpulan Informasi: SaveTok adalah layanan gratis dan sepenuhnya stateless. Kami tidak menyimpan, mengunggah, atau menyimpan tautan video, data pengunduh, atau riwayat unduhan apa pun di server kami. Semua analisis tautan dilakukan secara langsung (real-time) dan bersifat sementara.",
           "2. Data Analitik Standar: Kami mungkin menggunakan layanan analitik pihak ketiga standar (seperti Google Analytics) untuk mengumpulkan data statistik anonim tentang penggunaan situs untuk meningkatkan kualitas layanan. Ini termasuk informasi dasar seperti browser yang digunakan, waktu kunjungan, dan halaman yang dikunjungi.",
           "3. Google AdSense: Kami menggunakan Google AdSense untuk menayangkan iklan. Google menggunakan cookie untuk menayangkan iklan berdasarkan kunjungan pengguna sebelumnya ke situs ini atau situs lainnya.",
-          "4. Kontak Kami: Jika Anda memiliki pertanyaan atau masukan tentang kebijakan privasi kami, silakan hubungi tim kami di support@savetok.co."
+          "4. Kontak Kami: Jika Anda memiliki pertanyaan atau masukan tentang kebijakan privasi kami, silakan hubungi tim kami di support@savetok.web.id."
         ],
       },
       terms: {
@@ -55,7 +55,7 @@ export default function LegalModal({ type, language, onClose }: LegalModalProps)
           "1. Information Collection: SaveTok is a free and completely stateless utility. We do not store, host, or save any processed video links, downloader details, or download histories on our servers. All processing is transient and processed in real-time.",
           "2. Standard Analytical Data: We may use standard third-party analytics (such as Google Analytics) to gather anonymous stats regarding site usage to improve service quality. This includes basic details like browser type, visit timestamps, and pages viewed.",
           "3. Google AdSense: We use Google AdSense to serve ads. Google uses cookies to serve ads based on user visits to this site or other websites.",
-          "4. Contact Us: If you have questions or feedback regarding our privacy policy, please contact our team at support@savetok.co."
+          "4. Contact Us: If you have questions or feedback regarding our privacy policy, please contact our team at support@savetok.web.id."
         ],
       },
       terms: {
@@ -89,7 +89,7 @@ export default function LegalModal({ type, language, onClose }: LegalModalProps)
           "1. Recopilación de información: SaveTok es un servicio gratuito y completamente sin estado. No almacenamos, alojamos ni guardamos ningún enlace de video procesado, detalles del descargador o historial de descargas en nuestros servidores. Todo el procesamiento es transitorio.",
           "2. Datos analíticos estándar: Podemos utilizar análisis de terceros para recopilar estadísticas anónimas sobre el uso del sitio web para mejorar la calidad del servicio.",
           "3. Google AdSense: Utilizamos Google AdSense para publicar anuncios. Google utiliza cookies para publicar anuncios basados en las visitas previas del usuario a este sitio web.",
-          "4. Contacto: Si tienes alguna pregunta sobre nuestra política de privacidad, contáctanos en support@savetok.co."
+          "4. Contacto: Si tienes alguna pregunta sobre nuestra política de privacidad, contáctanos en support@savetok.web.id."
         ],
       },
       terms: {
