@@ -67,6 +67,8 @@ export default function Header({ currentLanguage, onLanguageChange }: HeaderProp
             {languages.map((lang) => (
               <button
                 key={lang}
+                id={`lang-btn-${lang.toLowerCase()}`}
+                data-testid={`lang-btn-${lang.toLowerCase()}`}
                 onClick={() => onLanguageChange(lang)}
                 className={`min-w-[40px] min-h-[40px] flex items-center justify-center rounded-full text-xs font-bold transition-all cursor-pointer ${
                   currentLanguage === lang
