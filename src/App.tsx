@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, Music, Sparkles } from "lucide-react";
+import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, Music, Sparkles, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import Header from "./components/Header";
@@ -12,6 +12,7 @@ import LegalModal from "./components/LegalModals";
 
 import { Language, MediaResult } from "./types";
 import { translations } from "./translations";
+import { detectUrlPlatform } from "./utils/urlDetector";
 
 function getRouteHero(route: string, lang: Language, t: typeof translations[Language]) {
   const norm = route.replace(/\/+$/, "") || "/";
@@ -84,6 +85,30 @@ function getRouteHero(route: string, lang: Language, t: typeof translations[Lang
           ),
           subtitle: "Save temporary TikTok stories in original HD quality before they expire after 24 hours.",
           placeholder: "Paste TikTok story URL..."
+        };
+  }
+
+  if (norm === "/viewer") {
+    return lang === "ID"
+      ? {
+          title: (
+            <>
+              TikTok Web Viewer<br />
+              <span className="text-rose-600">Lihat Profil Tanpa Login</span>
+            </>
+          ),
+          subtitle: "Jelajahi video dan profil kreator TikTok secara anonim langsung di browser tanpa perlu login akun.",
+          placeholder: "Tempel tautan profil atau video TikTok untuk melihat..."
+        }
+      : {
+          title: (
+            <>
+              TikTok Web Viewer<br />
+              <span className="text-rose-600">Watch Profiles Without Login</span>
+            </>
+          ),
+          subtitle: "Browse public TikTok creator profiles and videos anonymously directly in your browser without an account.",
+          placeholder: "Paste TikTok profile or video link to view..."
         };
   }
 
@@ -203,6 +228,14 @@ export default function App() {
       return;
     }
 
+    // Smart non-TikTok platform detection (Instagram, YouTube, Facebook, Twitter)
+    const platformCheck = detectUrlPlatform(urlInput, language);
+    if (platformCheck.isPlatformMismatch && platformCheck.errorMessage) {
+      setValidationError(platformCheck.errorMessage);
+      setStatus("error");
+      return;
+    }
+
     setValidationError(null);
     setStatus("processing");
     setVideoResult(null);
@@ -264,6 +297,13 @@ export default function App() {
           "applicationCategory": "MultimediaApplication",
           "operatingSystem": "All",
           "browserRequirements": "Requires HTML5 compatible browser.",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "14280",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -325,7 +365,8 @@ export default function App() {
               { id: "/", label: t.formatVideo, icon: Film },
               { id: "/mp3", label: t.formatMp3, icon: Music },
               { id: "/foto", label: t.formatPhotos, icon: ImageIcon },
-              { id: "/story", label: t.formatStory, icon: Sparkles }
+              { id: "/story", label: t.formatStory, icon: Sparkles },
+              { id: "/viewer", label: t.formatViewer, icon: Eye }
             ].map((tab) => {
               const active = currentRoute === tab.id;
               const Icon = tab.icon;

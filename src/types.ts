@@ -37,6 +37,7 @@ export interface TranslationSet {
   formatMp3: string;
   formatPhotos: string;
   formatStory: string;
+  formatViewer: string;
   subTagline: string;
   inputPlaceholder: string;
   buttonPaste: string;

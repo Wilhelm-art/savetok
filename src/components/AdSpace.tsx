@@ -1,41 +1,165 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState, CSSProperties } from "react";
 import { useInView } from "react-intersection-observer";
+import { FolderArchive, Music, Sparkles, ArrowRight } from "lucide-react";
 
 interface AdProps {
   label?: string;
   className?: string;
 }
 
-// Separate component that only mounts when visible
-function AdSenseBlock({ className = "", format = "auto", style = {} }: { className?: string, format?: string, style?: any }) {
-  const { ref, inView } = useInView({ triggerOnce: true, rootMargin: "200px 0px" });
+interface AdBlockProps {
+  className?: string;
+  format?: string;
+  style?: CSSProperties;
+  fallbackType?: "zip" | "mp3" | "viewer";
+}
+
+function FallbackFeatureBanner({ type }: { type: "zip" | "mp3" | "viewer" }) {
+  if (type === "mp3") {
+    return (
+      <div className="w-full bg-gradient-to-r from-rose-50/90 via-white to-orange-50/90 border border-rose-200/70 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs">
+        <div className="flex items-center gap-3 text-center sm:text-left">
+          <div className="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+            <Music className="w-5 h-5" />
+          </div>
+          <div>
+            <h4 className="font-sans font-bold text-xs sm:text-sm text-slate-900">
+              Ekstrak Lagu &amp; Sound TikTok ke MP3 320kbps
+            </h4>
+            <p className="font-sans text-[11px] sm:text-xs text-slate-500">
+              Konversi instan audio jernih dari video viral tanpa watermark.
+            </p>
+          </div>
+        </div>
+        <a
+          href="/mp3"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition-all shrink-0 shadow-xs"
+        >
+          <span>Buka MP3</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+    );
+  }
+
+  // Default ZIP photo slides banner
+  return (
+    <div className="w-full bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+      <div className="flex items-center gap-3 text-center sm:text-left">
+        <div className="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+          <FolderArchive className="w-5 h-5" />
+        </div>
+        <div>
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-rose-300">
+            <Sparkles className="w-3 h-3" />
+            <span>Fitur Unggulan SaveTok</span>
+          </div>
+          <h4 className="font-sans font-bold text-xs sm:text-sm text-white">
+            Unduh Semua Slide Foto Sekaligus (.ZIP)
+          </h4>
+          <p className="font-sans text-[11px] sm:text-xs text-slate-300">
+            Simpan semua gambar carousel TikTok resolusi asli tanpa watermark dalam satu klik.
+          </p>
+        </div>
+      </div>
+      <a
+        href="/foto"
+        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-900 text-xs font-bold transition-all shrink-0 shadow-xs"
+      >
+        <span>Coba Sekarang</span>
+        <ArrowRight className="w-3.5 h-3.5" />
+      </a>
+    </div>
+  );
+}
+
+function AdSenseBlock({
+  className = "",
+  format = "auto",
+  style = {},
+  fallbackType = "zip"
+}: AdBlockProps) {
+  const { ref: inViewRef, inView } = useInView({ triggerOnce: true, rootMargin: "200px 0px" });
+  const insRef = useRef<HTMLModElement | null>(null);
+  const [isUnfilled, setIsUnfilled] = useState(false);
+  const pushedRef = useRef(false);
 
   useEffect(() => {
-    // Only push if the script has actually loaded and this component is in view
-    // @ts-ignore
-    if (inView && window.adsbygoogleLoaded) {
+    if (!inView) return;
+
+    const pushAd = () => {
+      if (pushedRef.current) return;
       try {
         // @ts-ignore
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        if (window.adsbygoogle) {
+          pushedRef.current = true;
+          // @ts-ignore
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        }
       } catch (e) {
-        console.error("AdSense script error", e);
+        console.warn("AdSense push error", e);
       }
+    };
+
+    // @ts-ignore
+    if (window.adsbygoogleLoaded) {
+      pushAd();
+    } else {
+      window.addEventListener("adsbygoogleLoaded", pushAd, { once: true });
     }
+
+    const insEl = insRef.current;
+    if (!insEl) return;
+
+    const checkStatus = () => {
+      if (insEl.getAttribute("data-ad-status") === "unfilled") {
+        setIsUnfilled(true);
+      }
+    };
+
+    checkStatus();
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "attributes" && mutation.attributeName === "data-ad-status") {
+          checkStatus();
+        }
+      }
+    });
+
+    observer.observe(insEl, { attributes: true, attributeFilter: ["data-ad-status"] });
+
+    // Fallback timer: if after 7s ad is still not filled and adsbygoogle hasn't loaded (e.g. adblocker)
+    const timer = setTimeout(() => {
+      // @ts-ignore
+      if (!window.adsbygoogleLoaded && !insEl.innerHTML.trim()) {
+        setIsUnfilled(true);
+      }
+    }, 7000);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+      window.removeEventListener("adsbygoogleLoaded", pushAd);
+    };
   }, [inView]);
 
   return (
-    <div ref={ref} className={`w-full min-h-[90px] flex items-center justify-center overflow-hidden ${className}`}>
-      {inView ? (
-        <ins 
+    <div ref={inViewRef} className={`w-full min-h-[90px] flex items-center justify-center overflow-hidden ${className}`}>
+      {isUnfilled ? (
+        <FallbackFeatureBanner type={fallbackType} />
+      ) : inView ? (
+        <ins
+          ref={insRef}
           className="adsbygoogle"
           style={{ display: "block", minHeight: "90px", width: "100%", ...style }}
           data-ad-client="ca-pub-4420868155954120"
           data-ad-slot="auto"
           data-ad-format={format}
           data-full-width-responsive="true"
-        ></ins>
+        />
       ) : (
-        <div className="w-full h-[90px] bg-gray-50/50 rounded-xl" />
+        <div className="w-full h-[90px] bg-slate-100/50 rounded-xl" />
       )}
     </div>
   );
@@ -43,33 +167,33 @@ function AdSenseBlock({ className = "", format = "auto", style = {} }: { classNa
 
 export function TopBannerAd({ className = "" }: AdProps) {
   return (
-    <div 
+    <div
       id="adsense-top-banner"
       className={`w-full max-w-[728px] min-h-[90px] mx-auto flex items-center justify-center overflow-hidden ${className}`}
     >
-       <AdSenseBlock />
+      <AdSenseBlock fallbackType="zip" />
     </div>
   );
 }
 
 export function CardBaseAd({ className = "" }: AdProps) {
   return (
-    <div 
+    <div
       id="adsense-card-base-banner"
       className={`w-full max-w-[680px] min-h-[90px] mx-auto flex items-center justify-center overflow-hidden ${className}`}
     >
-      <AdSenseBlock />
+      <AdSenseBlock fallbackType="mp3" />
     </div>
   );
 }
 
 export function MidContentAd({ className = "" }: AdProps) {
   return (
-    <div 
+    <div
       id="adsense-mid-content-banner"
       className={`w-full max-w-[728px] min-h-[90px] mx-auto flex items-center justify-center overflow-hidden my-6 ${className}`}
     >
-      <AdSenseBlock />
+      <AdSenseBlock fallbackType="mp3" />
     </div>
   );
 }

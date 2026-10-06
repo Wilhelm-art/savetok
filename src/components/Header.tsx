@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Smartphone, Film, Music, Image as ImageIcon, Sparkles, BookOpen } from "lucide-react";
+import { Smartphone, Film, Music, Image as ImageIcon, Sparkles, BookOpen, Eye } from "lucide-react";
 import { Language } from "../types";
 import SaveTokLogo from "./SaveTokLogo";
 
@@ -53,6 +53,7 @@ export default function Header({
     { label: currentLanguage === "ID" ? "MP3" : "MP3", route: "/mp3", icon: Music },
     { label: currentLanguage === "ID" ? "Foto" : "Photos", route: "/foto", icon: ImageIcon },
     { label: currentLanguage === "ID" ? "Story" : "Story", route: "/story", icon: Sparkles },
+    { label: currentLanguage === "ID" ? "Viewer" : "Viewer", route: "/viewer", icon: Eye },
     { label: currentLanguage === "ID" ? "Panduan" : "Guides", route: "/panduan", icon: BookOpen },
   ];
 
