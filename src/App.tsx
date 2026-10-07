@@ -443,24 +443,18 @@ export default function App() {
             </span>
           </div>
 
-          <motion.h1
+          <h1
             id="hero-title"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
             className="font-sans font-black text-3xl sm:text-5xl md:text-6xl text-slate-900 tracking-tight leading-[1.15]"
           >
             {routeHero.title}
-          </motion.h1>
-          <motion.p
+          </h1>
+          <p
             id="hero-subtitle"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
             className="font-sans font-normal text-sm sm:text-base md:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed"
           >
             {routeHero.subtitle}
-          </motion.p>
+          </p>
         </div>
 
         {/* Format Selector Pills - Direct Interactive Navigation */}
