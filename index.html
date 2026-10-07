@@ -43,15 +43,6 @@
     <!-- Preconnect to external domains to speed up third-party scripts -->
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <!-- Google Fonts (Non-render-blocking) -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
-    <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" />
-    </noscript>
 
     <!-- Structured Data: WebApplication + FAQPage Schema for Search Engines -->
     <script type="application/ld+json">
@@ -190,11 +181,11 @@
       }
     </script>
 
-    <!-- Analytics & Tracking (Loaded on user interaction or idle to prevent TBT and blocking) -->
+    <!-- Third-Party Scripts: Analytics & AdSense (Deferred on interaction or idle to maximize Web Vitals) -->
     <script>
       (function() {
         var loaded = false;
-        function loadAnalytics() {
+        function loadDeferredScripts() {
           if (loaded) return;
           loaded = true;
           
@@ -214,22 +205,26 @@
           j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-5N3L5CZD');
+
+          // Google AdSense
+          var adScript = document.createElement('script');
+          adScript.async = true;
+          adScript.crossOrigin = 'anonymous';
+          adScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4420868155954120';
+          document.head.appendChild(adScript);
         }
 
         var events = ['scroll', 'touchstart', 'mousemove', 'keydown', 'click'];
         for (var i = 0; i < events.length; i++) {
-          window.addEventListener(events[i], loadAnalytics, { once: true, passive: true });
+          window.addEventListener(events[i], loadDeferredScripts, { once: true, passive: true });
         }
         if ('requestIdleCallback' in window) {
-          requestIdleCallback(function() { setTimeout(loadAnalytics, 6000); });
+          requestIdleCallback(function() { setTimeout(loadDeferredScripts, 4000); });
         } else {
-          setTimeout(loadAnalytics, 8000);
+          setTimeout(loadDeferredScripts, 5000);
         }
       })();
     </script>
-
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4420868155954120" crossorigin="anonymous"></script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -237,8 +232,11 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <!-- Static crawlable semantic fallback markup for search bots (replaced upon React hydrate) -->
-    <div id="root">
+    <!-- Single Page Application Mount Root -->
+    <div id="root"></div>
+
+    <!-- Static crawlable semantic fallback markup for non-JS search bots (contained in noscript to eliminate layout shift) -->
+    <noscript>
       <header style="background: linear-gradient(to right, #FF4B72, #FF7043); padding: 1.25rem 2rem; color: white;">
         <div style="max-width: 64rem; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
           <a href="https://savetok.web.id/" style="color: white; text-decoration: none; font-weight: 900; font-size: 1.5rem;">SaveTok</a>
@@ -249,7 +247,7 @@
         </div>
       </header>
 
-      <main style="max-width: 64rem; margin: 2rem auto; padding: 0 1rem; font-family: Roboto, sans-serif; color: #1A1A1A;">
+      <main style="max-width: 64rem; margin: 2rem auto; padding: 0 1rem; font-family: system-ui, sans-serif; color: #1A1A1A;">
         <section style="text-align: center; margin-bottom: 2rem;">
           <h1 style="font-size: 2.25rem; font-weight: 900; line-height: 1.2; margin-bottom: 0.75rem;">
             Download Video &amp; Slide Foto TikTok <span style="color: #FF4B72;">Tanpa Watermark HD</span>
@@ -310,7 +308,7 @@
       <footer style="border-top: 1px solid #E5E7EB; padding: 1.5rem; text-align: center; color: #9CA3AF; font-size: 0.75rem;">
         <p>SaveTok © 2026 — Not affiliated with TikTok or ByteDance.</p>
       </footer>
-    </div>
+    </noscript>
 
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -18,7 +18,7 @@ export default function GuidesSection({ language = "ID" }: GuidesSectionProps) {
       <div className="flex flex-col gap-6 text-center md:text-left">
         {/* Header */}
         <div className="flex flex-col gap-2 items-center md:items-start">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-200/60 uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-rose-100/70 text-rose-800 border border-rose-200 uppercase tracking-wider">
             <BookOpen className="w-3.5 h-3.5" />
             <span>{language === "ID" ? "Pusat Panduan & Edukasi" : "Guide & Resource Center"}</span>
           </div>

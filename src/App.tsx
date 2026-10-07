@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense, lazy } from "react";
 import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, Music, Sparkles, Eye, Clock, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import Header from "./components/Header";
 import { TopBannerAd } from "./components/AdSpace";
-import SEODetails from "./components/SEODetails";
-import GuidesSection from "./components/GuidesSection";
 import ProcessingSkeleton from "./components/ProcessingSkeleton";
-import DownloadCard from "./components/DownloadCard";
-import LegalModal from "./components/LegalModals";
+
+const SEODetails = lazy(() => import("./components/SEODetails"));
+const GuidesSection = lazy(() => import("./components/GuidesSection"));
+const DownloadCard = lazy(() => import("./components/DownloadCard"));
+const LegalModal = lazy(() => import("./components/LegalModals"));
 
 import { Language, MediaResult } from "./types";
 import { translations } from "./translations";
@@ -545,7 +546,7 @@ export default function App() {
               id="btn-submit-download"
               data-testid="btn-download"
               onClick={handleProcessUrl}
-              className="w-full sm:w-[72%] min-h-[46px] sm:min-h-[56px] flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-sans font-bold text-xs sm:text-base shadow-md shadow-rose-500/20 active:scale-98 transition-all cursor-pointer"
+              className="w-full sm:w-[72%] min-h-[46px] sm:min-h-[56px] flex items-center justify-center gap-2 bg-rose-700 hover:bg-rose-800 text-white rounded-xl font-sans font-bold text-xs sm:text-base shadow-md shadow-rose-700/20 active:scale-98 transition-all cursor-pointer"
             >
               <span>{t.buttonDownload}</span>
               <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
@@ -572,7 +573,7 @@ export default function App() {
           </AnimatePresence>
 
           {/* Example helper guidelines */}
-          <div className="text-center sm:text-left text-slate-400 font-sans font-medium text-xs px-1 mt-0.5 leading-normal">
+          <div className="text-center sm:text-left text-slate-600 font-sans font-medium text-xs px-1 mt-0.5 leading-normal">
             {t.exampleLabel} <code className="bg-slate-200/60 px-1.5 py-0.5 rounded text-slate-700 font-mono select-all">https://www.tiktok.com/@user/video/1234567890</code>
           </div>
         </div>
@@ -669,21 +670,27 @@ export default function App() {
             )}
 
             {status === "success" && videoResult && (
-              <DownloadCard 
-                key="result" 
-                result={videoResult} 
-                t={t} 
-                onReset={handleReset} 
-              />
+              <Suspense fallback={null}>
+                <DownloadCard 
+                  key="result" 
+                  result={videoResult} 
+                  t={t} 
+                  onReset={handleReset} 
+                />
+              </Suspense>
             )}
           </AnimatePresence>
         </div>
 
         {/* In-depth Editorial Guides & Articles for SEO / AdSense Value */}
-        <GuidesSection language={language} />
+        <Suspense fallback={null}>
+          <GuidesSection language={language} />
+        </Suspense>
 
         {/* Below the fold SEO section containing tutorial cards and collapsible FAQ accordion */}
-        <SEODetails t={t} />
+        <Suspense fallback={null}>
+          <SEODetails t={t} />
+        </Suspense>
 
       </main>
 
@@ -736,11 +743,13 @@ export default function App() {
       </AnimatePresence>
 
       {/* Overlay modal document viewer for GDPR/Legal compliance */}
-      <LegalModal
-        type={activeLegal}
-        language={language}
-        onClose={() => setActiveLegal(null)}
-      />
+      <Suspense fallback={null}>
+        <LegalModal
+          type={activeLegal}
+          language={language}
+          onClose={() => setActiveLegal(null)}
+        />
+      </Suspense>
 
     </div>
   );

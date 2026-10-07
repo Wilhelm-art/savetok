@@ -17,13 +17,14 @@ function AdSenseBlock({
   className = "",
   format = "auto",
   style = {},
-  slot = "auto"
+  slot
 }: AdBlockProps) {
   const { ref: inViewRef, inView } = useInView({ triggerOnce: true, rootMargin: "200px 0px" });
   const pushedRef = useRef(false);
+  const isValidNumericSlot = Boolean(slot && /^\d+$/.test(slot));
 
   useEffect(() => {
-    if (!inView || pushedRef.current) return;
+    if (!inView || !isValidNumericSlot || pushedRef.current) return;
 
     try {
       // @ts-ignore
@@ -35,7 +36,11 @@ function AdSenseBlock({
     } catch (e) {
       console.warn("AdSense push error", e);
     }
-  }, [inView]);
+  }, [inView, isValidNumericSlot]);
+
+  if (!isValidNumericSlot) {
+    return null;
+  }
 
   return (
     <div ref={inViewRef} className={`w-full flex items-center justify-center overflow-hidden ${className}`}>
