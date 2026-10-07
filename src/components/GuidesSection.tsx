@@ -61,8 +61,8 @@ export default function GuidesSection({ language = "ID" }: GuidesSectionProps) {
             className="w-full bg-white rounded-3xl p-6 md:p-10 border border-slate-200/80 shadow-[0_4px_25px_rgba(0,0,0,0.03)] flex flex-col gap-6"
           >
             {/* Meta tags ribbon */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 font-sans border-b border-slate-100 pb-4">
-              <span className="inline-flex items-center gap-1.5 font-semibold text-slate-700">
+            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600 font-medium font-sans border-b border-slate-100 pb-4">
+              <span className="inline-flex items-center gap-1.5 font-bold text-slate-800">
                 <User className="w-3.5 h-3.5 text-rose-500" />
                 {activeArticle.author}
               </span>

@@ -171,7 +171,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
         {/* Preview pane */}
         <div 
           id="result-thumbnail-container"
-          className="w-full md:w-[46%] relative bg-gray-950 overflow-hidden flex flex-col items-center justify-center min-h-[320px] md:min-h-[420px] group"
+          className="w-full md:w-[46%] relative bg-gray-950 overflow-hidden flex flex-col items-center justify-center min-h-[260px] sm:min-h-[320px] md:min-h-[420px] group"
         >
           {isPhotoPost && result.images && result.images.length > 0 ? (
             // Photo Slideshow Preview
@@ -238,7 +238,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
         {/* Action Detail List */}
         <div 
           id="result-details-pane"
-          className="w-full md:w-[54%] p-6 md:p-8 flex flex-col justify-between gap-6"
+          className="w-full md:w-[54%] p-4 sm:p-6 md:p-8 flex flex-col justify-between gap-5 sm:gap-6"
         >
           <div>
             {/* Creator Tag */}
@@ -377,7 +377,7 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                   id="btn-download-mp3"
                   data-testid="btn-download-mp3"
                   onClick={() => handleDownload(result.downloadMp3!, "audio")}
-                  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl border-2 border-slate-200 text-slate-700 font-sans font-bold text-sm tracking-wide bg-white hover:bg-slate-50 active:scale-98 transition-all cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-2 py-3.5 px-4 sm:px-6 rounded-2xl border-2 border-slate-200 text-slate-700 font-sans font-bold text-xs sm:text-sm tracking-wide bg-white hover:bg-slate-50 active:scale-98 transition-all cursor-pointer"
                 >
                   <Music className="w-4.5 h-4.5 text-rose-500" />
                   <span>{t.downloadMp3Label}</span>
@@ -386,9 +386,9 @@ export default function DownloadCard({ result, t, onReset }: DownloadCardProps) 
                   id="btn-preview-audio"
                   onClick={toggleAudioPlay}
                   title={isPlayingAudio ? "Jeda Audio" : "Putar Audio"}
-                  className="w-12 h-12 flex items-center justify-center rounded-2xl border-2 border-slate-200 bg-white hover:bg-slate-50 text-rose-500 active:scale-95 transition-all cursor-pointer shrink-0"
+                  className="w-11 sm:w-12 h-11 sm:h-12 flex items-center justify-center rounded-2xl border-2 border-slate-200 bg-white hover:bg-slate-50 text-rose-500 active:scale-95 transition-all cursor-pointer shrink-0"
                 >
-                  {isPlayingAudio ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
+                  {isPlayingAudio ? <Pause className="w-4.5 sm:w-5 h-4.5 sm:h-5" /> : <Play className="w-4.5 sm:w-5 h-4.5 sm:h-5 ml-0.5" />}
                 </button>
               </div>
             )}

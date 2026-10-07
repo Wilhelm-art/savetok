@@ -46,8 +46,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Google Fonts (Non-render-blocking) -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=Open+Sans:wght@400;500;600;700&display=swap" />
+    </noscript>
 
     <!-- Structured Data: WebApplication + FAQPage Schema for Search Engines -->
     <script type="application/ld+json">
@@ -186,55 +190,46 @@
       }
     </script>
 
-    <!-- Google Analytics (Deferred to prevent LCP blocking) -->
+    <!-- Analytics & Tracking (Loaded on user interaction or idle to prevent TBT and blocking) -->
     <script>
-      setTimeout(function() {
-        var script = document.createElement('script');
-        script.src = "https://www.googletagmanager.com/gtag/js?id=G-89789H5Q58";
-        script.async = true;
-        document.head.appendChild(script);
-        
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag("js", new Date());
-        gtag("config", "G-89789H5Q58");
-      }, 4000);
-    </script>
-    
-    <!-- Google Tag Manager (Deferred) -->
-    <script>
-      setTimeout(function() {
-        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-5N3L5CZD');
-      }, 3500);
+      (function() {
+        var loaded = false;
+        function loadAnalytics() {
+          if (loaded) return;
+          loaded = true;
+          
+          // Google Analytics GA4
+          var gaScript = document.createElement('script');
+          gaScript.async = true;
+          gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-89789H5Q58';
+          document.head.appendChild(gaScript);
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-89789H5Q58');
+
+          // Google Tag Manager
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-5N3L5CZD');
+        }
+
+        var events = ['scroll', 'touchstart', 'mousemove', 'keydown', 'click'];
+        for (var i = 0; i < events.length; i++) {
+          window.addEventListener(events[i], loadAnalytics, { once: true, passive: true });
+        }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(function() { setTimeout(loadAnalytics, 6000); });
+        } else {
+          setTimeout(loadAnalytics, 8000);
+        }
+      })();
     </script>
 
-    <!-- Google AdSense (Deferred execution) -->
-    <script>
-      window.adsbygoogleLoaded = false;
-      
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          var script = document.createElement('script');
-          script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4420868155954120";
-          script.async = true;
-          script.crossOrigin = "anonymous";
-          script.onload = function() {
-            window.adsbygoogleLoaded = true;
-            var adElements = document.querySelectorAll('.adsbygoogle');
-            adElements.forEach(function() {
-               try {
-                 (window.adsbygoogle = window.adsbygoogle || []).push({});
-               } catch (e) { console.error(e); }
-            });
-          };
-          document.head.appendChild(script);
-        }, 3500);
-      });
-    </script>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4420868155954120" crossorigin="anonymous"></script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->

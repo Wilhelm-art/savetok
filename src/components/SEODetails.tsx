@@ -42,7 +42,7 @@ export default function SEODetails({ t }: SEODetailsProps) {
   return (
     <div id="below-the-fold-seo-details" className="w-full flex flex-col gap-12 mt-4">
       {/* 1. Tutorial Section */}
-      <section id="how-to-download-section" className="w-full bg-slate-50/70 border border-slate-200/60 rounded-3xl py-12 px-4 sm:px-6 lg:px-8 mt-4">
+      <section id="how-to-download-section" className="w-full bg-slate-50/70 border border-slate-200/60 rounded-3xl py-8 sm:py-12 px-4 sm:px-6 lg:px-8 mt-4">
         <div className="max-w-7xl mx-auto text-center">
           <motion.h2 
             id="how-to-download-title"
@@ -50,7 +50,7 @@ export default function SEODetails({ t }: SEODetailsProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
-            className="font-sans font-black text-2xl md:text-3xl text-slate-900 mb-12 tracking-tight"
+            className="font-sans font-black text-2xl md:text-3xl text-slate-900 mb-8 sm:mb-12 tracking-tight"
           >
             {t.howToDownloadTitle}
           </motion.h2>
@@ -121,7 +121,7 @@ export default function SEODetails({ t }: SEODetailsProps) {
               </ul>
             </div>
             
-            <div className="w-full md:w-[38%] bg-white rounded-2xl aspect-square flex items-center justify-center p-6 border border-slate-200/80 shadow-xs relative overflow-hidden">
+            <div className="w-full md:w-[38%] bg-white rounded-2xl py-8 md:py-0 md:aspect-square flex items-center justify-center p-6 border border-slate-200/80 shadow-xs relative overflow-hidden">
               <div className="w-20 h-20 bg-rose-50 rounded-2xl flex items-center justify-center border border-rose-100 shadow-2xs">
                 <svg className="w-10 h-10 text-rose-500" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
@@ -143,15 +143,15 @@ export default function SEODetails({ t }: SEODetailsProps) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
             <div className="bg-white p-6 rounded-2xl shadow-2xs border border-slate-200/80 text-left">
-              <h3 className="font-sans font-bold text-lg mb-2 text-rose-500">{t.boxUnlimitedTitle}</h3>
-              <p className="font-sans text-slate-500 text-sm leading-relaxed">
+              <h3 className="font-sans font-bold text-lg mb-2 text-rose-700">{t.boxUnlimitedTitle}</h3>
+              <p className="font-sans text-slate-600 text-sm leading-relaxed">
                 {t.boxUnlimitedDesc}
               </p>
             </div>
             
             <div className="bg-white p-6 rounded-2xl shadow-2xs border border-slate-200/80 text-left">
               <h3 className="font-sans font-bold text-lg mb-2 text-slate-900">{t.boxFormatsTitle}</h3>
-              <p className="font-sans text-slate-500 text-sm leading-relaxed">
+              <p className="font-sans text-slate-600 text-sm leading-relaxed">
                 {t.boxFormatsDesc}
               </p>
             </div>
@@ -199,7 +199,7 @@ export default function SEODetails({ t }: SEODetailsProps) {
             {/* Photo Slideshow & Audio SEO Feature Highlight */}
             <div className="bg-white p-6 md:p-8 rounded-3xl border border-slate-200/80 shadow-xs mt-2 flex flex-col md:flex-row gap-6 items-center">
               <div className="flex-1 flex flex-col gap-3 text-left">
-                <span className="text-xs font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-3 py-1 rounded-full w-fit border border-rose-200/60">
+                <span className="text-xs font-bold uppercase tracking-wider text-rose-800 bg-rose-100/70 px-3 py-1 rounded-full w-fit border border-rose-200">
                   {t.photoFeatureTag}
                 </span>
                 <h3 className="font-sans font-black text-xl md:text-2xl text-slate-900">
@@ -254,7 +254,7 @@ export default function SEODetails({ t }: SEODetailsProps) {
                 <button
                   id={`faq-trigger-${item.id}`}
                   onClick={() => toggleExpand(item.id)}
-                  className="w-full px-6 py-4 min-h-[64px] flex justify-between items-center text-left gap-4 font-sans focus:outline-none transition-colors cursor-pointer"
+                  className="w-full px-4 sm:px-6 py-4 min-h-[64px] flex justify-between items-center text-left gap-3 sm:gap-4 font-sans focus:outline-none transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
                     <HelpCircle className={`w-5 h-5 shrink-0 transition-colors ${isExpanded ? "text-rose-500" : "text-slate-400"}`} />
@@ -278,7 +278,7 @@ export default function SEODetails({ t }: SEODetailsProps) {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2, ease: "easeInOut" }}
                     >
-                      <div className="px-6 pb-5 pt-1 text-slate-600 font-sans text-sm md:text-base leading-relaxed border-t border-slate-100">
+                      <div className="px-4 sm:px-6 pb-5 pt-1 text-slate-600 font-sans text-sm md:text-base leading-relaxed border-t border-slate-100">
                         {item.answer}
                       </div>
                     </motion.div>

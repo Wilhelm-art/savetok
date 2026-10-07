@@ -3,7 +3,7 @@ import { Link, Clipboard, ArrowRight, X, AlertCircle, Film, Image as ImageIcon, 
 import { motion, AnimatePresence } from "motion/react";
 
 import Header from "./components/Header";
-import { TopBannerAd, MobileStickyAnchorAd } from "./components/AdSpace";
+import { TopBannerAd } from "./components/AdSpace";
 import SEODetails from "./components/SEODetails";
 import GuidesSection from "./components/GuidesSection";
 import ProcessingSkeleton from "./components/ProcessingSkeleton";
@@ -433,9 +433,6 @@ export default function App() {
       {/* Primary Application Content */}
       <main className="flex-grow flex flex-col items-center w-full px-4 sm:px-6 md:px-8 py-6 md:py-10 max-w-5xl mx-auto gap-8">
         
-        {/* Designated AdSense Top Banner Container */}
-        <TopBannerAd label="Ad Space (728x90)" />
-
         {/* Hero Section */}
         <div id="hero-heading-block" className="w-full max-w-3xl text-center flex flex-col gap-3">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-white text-slate-800 border border-slate-200 shadow-2xs mx-auto">
@@ -467,7 +464,7 @@ export default function App() {
 
         {/* Format Selector Pills - Direct Interactive Navigation */}
         <div className="w-full max-w-3xl flex items-center justify-center">
-          <div className="inline-flex bg-slate-200/70 p-1 rounded-2xl border border-slate-200 gap-1 overflow-x-auto max-w-full">
+          <div className="inline-flex bg-slate-200/70 p-1 rounded-2xl border border-slate-200 gap-1 overflow-x-auto max-w-full [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden px-1">
             {[
               { id: "/", label: t.formatVideo, icon: Film },
               { id: "/mp3", label: t.formatMp3, icon: Music },
@@ -481,7 +478,7 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => navigateTo(tab.id)}
-                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap min-h-[38px] ${
+                  className={`flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[38px] ${
                     active 
                       ? "bg-white text-slate-900 shadow-xs" 
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
@@ -498,8 +495,8 @@ export default function App() {
         {/* Interactive URL Form Section */}
         <div id="downloader-form-card" className="w-full max-w-3xl flex flex-col gap-3">
           <div className="relative w-full rounded-2xl bg-white border-2 border-slate-200 transition-all focus-within:border-slate-900 focus-within:ring-4 focus-within:ring-slate-900/5 shadow-sm">
-            <div className="absolute inset-y-0 left-4 sm:left-5 flex items-center pointer-events-none">
-              <Link className="w-5 h-5 text-slate-400" />
+            <div className="absolute inset-y-0 left-3.5 sm:left-5 flex items-center pointer-events-none">
+              <Link className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-slate-400" />
             </div>
             
             <input
@@ -510,7 +507,7 @@ export default function App() {
               onChange={(e) => setUrlInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleProcessUrl()}
               placeholder={routeHero.placeholder}
-              className={`w-full h-14 sm:h-16 md:h-18 pl-12 sm:pl-14 pr-12 rounded-2xl text-sm sm:text-base md:text-lg text-slate-900 placeholder:text-slate-400 outline-none transition-all ${
+              className={`w-full h-14 sm:h-16 md:h-18 pl-10.5 sm:pl-14 pr-10 sm:pr-12 rounded-2xl text-xs sm:text-base md:text-lg text-slate-900 placeholder:text-slate-400 outline-none transition-all ${
                 validationError 
                   ? "border-[#D32F2F] shadow-[0_0_0_3px_rgba(211,47,47,0.1)]" 
                   : ""
@@ -526,7 +523,7 @@ export default function App() {
                   setUrlInput("");
                   setValidationError(null);
                 }}
-                className="absolute right-3.5 sm:right-4 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
+                className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -538,9 +535,9 @@ export default function App() {
               id="btn-paste-link"
               data-testid="btn-paste"
               onClick={handlePaste}
-              className="w-full sm:w-[28%] min-h-[48px] sm:min-h-[56px] flex items-center justify-center gap-2 border-2 border-slate-200 hover:border-slate-300 text-slate-700 bg-white hover:bg-slate-50 rounded-xl font-sans font-bold text-sm sm:text-base active:scale-98 transition-all cursor-pointer shadow-2xs"
+              className="w-full sm:w-[28%] min-h-[46px] sm:min-h-[56px] flex items-center justify-center gap-2 border-2 border-slate-200 hover:border-slate-300 text-slate-700 bg-white hover:bg-slate-50 rounded-xl font-sans font-bold text-xs sm:text-base active:scale-98 transition-all cursor-pointer shadow-2xs"
             >
-              <Clipboard className="w-4.5 h-4.5 text-slate-500" />
+              <Clipboard className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-500" />
               <span>{t.buttonPaste}</span>
             </button>
 
@@ -548,10 +545,10 @@ export default function App() {
               id="btn-submit-download"
               data-testid="btn-download"
               onClick={handleProcessUrl}
-              className="w-full sm:w-[72%] min-h-[48px] sm:min-h-[56px] flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-sans font-bold text-sm sm:text-base shadow-md shadow-rose-500/20 active:scale-98 transition-all cursor-pointer"
+              className="w-full sm:w-[72%] min-h-[46px] sm:min-h-[56px] flex items-center justify-center gap-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-sans font-bold text-xs sm:text-base shadow-md shadow-rose-500/20 active:scale-98 transition-all cursor-pointer"
             >
               <span>{t.buttonDownload}</span>
-              <ArrowRight className="w-4.5 h-4.5" />
+              <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5" />
             </button>
           </div>
 
@@ -600,15 +597,18 @@ export default function App() {
           </span>
         </div>
 
+        {/* Designated AdSense Top Banner Container (Stable post-hero placement) */}
+        <TopBannerAd label="Ad Space (728x90)" />
+
         {/* 5A. Recent Downloads History (Visible if user has downloaded items and currently idle) */}
         {recentHistory.length > 0 && status === "idle" && (
-          <div id="recent-downloads-section" className="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 shadow-2xs">
+          <div id="recent-downloads-section" className="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl p-3.5 sm:p-5 shadow-2xs">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-rose-500" />
-                <h3 className="font-sans font-bold text-xs sm:text-sm text-slate-800">
+                <h2 className="font-sans font-bold text-xs sm:text-sm text-slate-800">
                   {language === "ID" ? "Riwayat Unduhan Terakhir" : "Recent Downloads"}
-                </h3>
+                </h2>
                 <span className="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
                   {recentHistory.length}/5
                 </span>
@@ -623,7 +623,7 @@ export default function App() {
                 <span>{language === "ID" ? "Hapus" : "Clear"}</span>
               </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
               {recentHistory.map((item) => (
                 <div
                   key={item.id}
@@ -634,17 +634,17 @@ export default function App() {
                       document.getElementById("dynamic-content-state-container")?.scrollIntoView({ behavior: "smooth", block: "start" });
                     }, 50);
                   }}
-                  className="flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-rose-50/40 hover:border-rose-200/60 transition-all cursor-pointer group text-left"
+                  className="flex items-center gap-2.5 sm:gap-3 p-2 sm:p-2.5 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-rose-50/40 hover:border-rose-200/60 transition-all cursor-pointer group text-left"
                 >
                   {item.cover ? (
                     <img
                       src={`/api/download?type=cover&id=${encodeURIComponent(item.id)}&url=${encodeURIComponent(item.cover)}`}
                       alt={item.title}
-                      className="w-11 h-11 rounded-lg object-cover bg-slate-200 shrink-0 border border-slate-200"
+                      className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg object-cover bg-slate-200 shrink-0 border border-slate-200"
                     />
                   ) : (
-                    <div className="w-11 h-11 rounded-lg bg-slate-200 flex items-center justify-center shrink-0 text-slate-400">
-                      <Film className="w-5 h-5" />
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-lg bg-slate-200 flex items-center justify-center shrink-0 text-slate-400">
+                      <Film className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
@@ -688,40 +688,37 @@ export default function App() {
       </main>
 
       {/* Sleek Design Footer */}
-      <footer className="w-full mt-auto bg-white border-t border-gray-100 py-6 px-6 md:px-12 pb-24 sm:pb-6 relative z-50">
+      <footer className="w-full mt-auto bg-white border-t border-gray-100 py-6 px-6 md:px-12">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-gray-400 font-sans">
+          <p className="text-xs text-slate-600 font-sans font-medium">
             {t.copyright} — Not affiliated with TikTok/ByteDance.
           </p>
           
-          <nav className="flex flex-wrap gap-2 md:space-x-4 font-sans text-xs font-semibold text-gray-500">
+          <nav className="flex flex-wrap gap-2 md:space-x-4 font-sans text-xs font-semibold text-slate-700">
             <button
               id="footer-link-privacy"
               onClick={() => setActiveLegal("privacy")}
-              className="hover:text-[#FF4B72] transition-colors cursor-pointer min-h-[48px] px-2 flex items-center"
+              className="hover:text-rose-600 transition-colors cursor-pointer min-h-[48px] px-2 flex items-center"
             >
               {t.privacyPolicy}
             </button>
             <button
               id="footer-link-terms"
               onClick={() => setActiveLegal("terms")}
-              className="hover:text-[#FF4B72] transition-colors cursor-pointer min-h-[48px] px-2 flex items-center"
+              className="hover:text-rose-600 transition-colors cursor-pointer min-h-[48px] px-2 flex items-center"
             >
               {t.termsOfService}
             </button>
             <button
               id="footer-link-disclaimer"
               onClick={() => setActiveLegal("disclaimer")}
-              className="hover:text-[#FF4B72] transition-colors cursor-pointer min-h-[48px] px-2 flex items-center"
+              className="hover:text-rose-600 transition-colors cursor-pointer min-h-[48px] px-2 flex items-center"
             >
               {t.disclaimer}
             </button>
           </nav>
         </div>
       </footer>
-
-      {/* 1A. Mobile Sticky AdSense Anchor Banner */}
-      <MobileStickyAnchorAd />
 
       {/* 5B. Micro-Toast Notification for Paste Action */}
       <AnimatePresence>

@@ -85,7 +85,7 @@ export default function Header({
       </div>
 
       {/* Sub-Route Navigation Pills */}
-      <nav className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto py-1 scrollbar-none text-xs md:text-sm font-semibold max-w-[45vw] sm:max-w-none">
+      <nav className="flex items-center gap-1 sm:gap-1.5 overflow-x-auto py-1 scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden text-xs md:text-sm font-semibold max-w-[50vw] sm:max-w-none">
         {navLinks.map((item) => {
           const isActive = currentRoute === item.route;
           const Icon = item.icon;
@@ -95,15 +95,17 @@ export default function Header({
               key={item.route}
               id={`header-nav-${navId}`}
               data-testid={`header-nav-${navId}`}
+              aria-label={item.label}
+              title={item.label}
               onClick={() => handleNav(item.route)}
-              className={`px-2.5 sm:px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap min-h-[36px] ${
+              className={`px-2 sm:px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap min-h-[34px] sm:min-h-[36px] ${
                 isActive 
                   ? "bg-slate-900 text-white shadow-xs font-bold" 
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
-              <span className="hidden xs:inline">{item.label}</span>
+              <Icon className="w-3.5 h-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">{item.label}</span>
             </button>
           );
         })}
@@ -115,6 +117,7 @@ export default function Header({
         <button
           id="btn-pwa-install"
           onClick={handleInstallClick}
+          aria-label={currentLanguage === "ID" ? "Pasang Aplikasi di Layar Utama HP" : "Install App on Home Screen"}
           title={currentLanguage === "ID" ? "Pasang Aplikasi di Layar Utama HP" : "Install App on Home Screen"}
           className="bg-slate-100 hover:bg-slate-200/90 text-slate-700 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200/70 shadow-2xs cursor-pointer min-h-[36px]"
         >
@@ -125,17 +128,18 @@ export default function Header({
         </button>
 
         {/* Focused 2-way Language Segmented Toggle (ID | EN) */}
-        <div className="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200/80 shadow-2xs">
+        <div className="flex bg-slate-100 p-0.5 rounded-xl border border-slate-200/80 shadow-2xs" role="group" aria-label="Pilihan Bahasa">
           {languages.map((lang) => (
             <button
               key={lang}
               id={`lang-btn-${lang.toLowerCase()}`}
               data-testid={`lang-btn-${lang.toLowerCase()}`}
+              aria-label={`Pilih Bahasa ${lang}`}
               onClick={() => onLanguageChange(lang)}
               className={`min-w-[32px] sm:min-w-[36px] h-7 sm:h-8 flex items-center justify-center rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
                 currentLanguage === lang
                   ? "bg-white text-slate-900 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800"
+                  : "text-slate-600 hover:text-slate-900"
               }`}
             >
               {lang}
