@@ -6,8 +6,8 @@ import Header from "./components/Header";
 import { TopBannerAd } from "./components/AdSpace";
 import ProcessingSkeleton from "./components/ProcessingSkeleton";
 
-const SEODetails = lazy(() => import("./components/SEODetails"));
-const GuidesSection = lazy(() => import("./components/GuidesSection"));
+import SEODetails from "./components/SEODetails";
+import GuidesSection from "./components/GuidesSection";
 const DownloadCard = lazy(() => import("./components/DownloadCard"));
 const LegalModal = lazy(() => import("./components/LegalModals"));
 
@@ -683,14 +683,10 @@ export default function App() {
         </div>
 
         {/* In-depth Editorial Guides & Articles for SEO / AdSense Value */}
-        <Suspense fallback={null}>
-          <GuidesSection language={language} />
-        </Suspense>
+        <GuidesSection language={language} />
 
         {/* Below the fold SEO section containing tutorial cards and collapsible FAQ accordion */}
-        <Suspense fallback={null}>
-          <SEODetails t={t} />
-        </Suspense>
+        <SEODetails t={t} />
 
       </main>
 

@@ -78,7 +78,7 @@ export default function Header({
           <span className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-sans">
             SaveTok
           </span>
-          <span className="hidden sm:inline-block px-1.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-rose-50 text-rose-600 border border-rose-200/60">
+          <span className="hidden sm:inline-block px-1.5 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-rose-100/70 text-rose-800 border border-rose-200">
             PRO
           </span>
         </div>
@@ -117,7 +117,11 @@ export default function Header({
         <button
           id="btn-pwa-install"
           onClick={handleInstallClick}
-          aria-label={currentLanguage === "ID" ? "Pasang Aplikasi di Layar Utama HP" : "Install App on Home Screen"}
+          aria-label={
+            canInstall 
+              ? (currentLanguage === "ID" ? "Pasang App di Layar Utama HP" : "Install App on Home Screen")
+              : (currentLanguage === "ID" ? "App - Petunjuk Pemasangan Aplikasi" : "App - Web App Installation Guide")
+          }
           title={currentLanguage === "ID" ? "Pasang Aplikasi di Layar Utama HP" : "Install App on Home Screen"}
           className="bg-slate-100 hover:bg-slate-200/90 text-slate-700 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-200/70 shadow-2xs cursor-pointer min-h-[36px]"
         >
