@@ -218,7 +218,7 @@
           document.head.appendChild(adScript);
         }
 
-        var events = ['scroll', 'touchstart', 'keydown', 'click'];
+        var events = ['click', 'touchstart', 'keydown'];
         for (var i = 0; i < events.length; i++) {
           window.addEventListener(events[i], loadDeferredScripts, { once: true, passive: true });
         }
