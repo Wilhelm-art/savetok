@@ -12,7 +12,23 @@ if (!fs.existsSync(BASE_HTML_PATH)) {
   process.exit(1);
 }
 
-const baseHtml = fs.readFileSync(BASE_HTML_PATH, 'utf8');
+let baseHtml = fs.readFileSync(BASE_HTML_PATH, 'utf8');
+
+// Inline critical CSS into <head> to eliminate render-blocking external stylesheet delay
+const assetsDir = path.join(DIST_DIR, 'assets');
+if (fs.existsSync(assetsDir)) {
+  const cssFiles = fs.readdirSync(assetsDir).filter(f => f.endsWith('.css'));
+  if (cssFiles.length > 0) {
+    const mainCss = cssFiles[0];
+    const cssContent = fs.readFileSync(path.join(assetsDir, mainCss), 'utf8');
+    baseHtml = baseHtml.replace(
+      new RegExp(`<link\\s+rel=["']stylesheet["'][^>]*href=["'][^"']*${mainCss}["'][^>]*>`, 'i'),
+      `<style id="savetok-bundle-css">${cssContent}</style>`
+    );
+    fs.writeFileSync(BASE_HTML_PATH, baseHtml, 'utf8');
+    console.log(`[prerender] Successfully inlined ${mainCss} (${Math.round(cssContent.length / 1024)} KB) into index.html`);
+  }
+}
 
 const routes = [
   {
