@@ -239,6 +239,13 @@ export default function App() {
     if (ogDescMeta) ogDescMeta.setAttribute("content", pageDesc);
     const twDescMeta = document.querySelector('meta[name="twitter:description"]');
     if (twDescMeta) twDescMeta.setAttribute("content", pageDesc);
+
+    // Update canonical link & og:url dynamically to prevent GSC canonical mismatch
+    const canonicalUrl = `https://savetok.web.id${norm === "/" ? "/" : norm}`;
+    const canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (canonicalLink) canonicalLink.setAttribute("href", canonicalUrl);
+    const ogUrlMeta = document.querySelector('meta[property="og:url"]');
+    if (ogUrlMeta) ogUrlMeta.setAttribute("content", canonicalUrl);
   }, [currentRoute, language]);
 
   // 2. Interactive Input States
@@ -393,33 +400,6 @@ export default function App() {
 
   return (
     <div id="savetok-application-wrapper" className="min-h-screen bg-slate-50/50 text-slate-900 flex flex-col font-sans selection:bg-rose-500/10 selection:text-rose-600">
-      
-      {/* Optimized SEO Metadata and JSON-LD Structured Schema Injection */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebApplication",
-          "name": "SaveTok",
-          "url": "https://savetok.web.id/",
-          "description": "Fast, free, and unlimited TikTok video downloader without watermarks directly to your device.",
-          "applicationCategory": "MultimediaApplication",
-          "operatingSystem": "All",
-          "browserRequirements": "Requires HTML5 compatible browser.",
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.9",
-            "reviewCount": "14280",
-            "bestRating": "5",
-            "worstRating": "1"
-          },
-          "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-          }
-        })}
-      </script>
-
       {/* Modular Navigation Header */}
       <Header 
         currentLanguage={language} 

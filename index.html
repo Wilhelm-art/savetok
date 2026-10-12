@@ -40,9 +40,9 @@
     <meta name="twitter:title" content="SaveTok - Download Video TikTok &amp; Slide Foto Tanpa Watermark HD" />
     <meta name="twitter:description" content="Download Video TikTok Tanpa Watermark dan Slide Foto TikTok gratis, cepat, tanpa aplikasi dengan SaveTok. Kualitas HD MP4 dan audio MP3 langsung ke perangkat." />
 
-    <!-- Preconnect to external domains to speed up third-party scripts -->
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+    <!-- DNS prefetch for deferred third-party services -->
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
 
     <!-- Structured Data: WebApplication + FAQPage Schema for Search Engines -->
     <script type="application/ld+json">
@@ -219,9 +219,9 @@
           window.addEventListener(events[i], loadDeferredScripts, { once: true, passive: true });
         }
         if ('requestIdleCallback' in window) {
-          requestIdleCallback(function() { setTimeout(loadDeferredScripts, 4000); });
+          requestIdleCallback(function() { setTimeout(loadDeferredScripts, 7500); });
         } else {
-          setTimeout(loadDeferredScripts, 5000);
+          setTimeout(loadDeferredScripts, 8500);
         }
       })();
     </script>
