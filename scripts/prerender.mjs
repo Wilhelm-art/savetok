@@ -19,49 +19,65 @@ const routes = [
     path: 'mp3',
     title: 'Download Lagu & Sound TikTok MP3 320kbps - SaveTok',
     description: 'Ekstrak dan simpan audio lagu viral TikTok ke format MP3 320kbps jernih tanpa watermark.',
-    canonical: 'https://savetok.web.id/mp3'
+    canonical: 'https://savetok.web.id/mp3',
+    heroTitle: 'Download Lagu &amp; Sound TikTok <span class="text-rose-600">Audio MP3 Jernih</span>',
+    heroSubtitle: 'Ekstrak dan simpan audio lagu viral TikTok ke format MP3 320kbps tanpa watermark, cepat dan gratis.'
   },
   {
     path: 'foto',
     title: 'Download Foto Slide TikTok HD & ZIP Sekaligus - SaveTok',
     description: 'Unduh semua foto slide carousel TikTok kualitas asli tanpa watermark dalam satu paket ZIP.',
-    canonical: 'https://savetok.web.id/foto'
+    canonical: 'https://savetok.web.id/foto',
+    heroTitle: 'Download Foto Slide TikTok <span class="text-rose-600">HD &amp; ZIP Sekaligus</span>',
+    heroSubtitle: 'Unduh semua foto slide carousel TikTok kualitas asli tanpa watermark dalam satu paket ZIP gratis.'
   },
   {
     path: 'story',
     title: 'Download Story TikTok Tanpa Watermark HD - SaveTok',
     description: 'Simpan story TikTok favorit sebelum kedaluwarsa 24 jam dengan kualitas video HD jernih.',
-    canonical: 'https://savetok.web.id/story'
+    canonical: 'https://savetok.web.id/story',
+    heroTitle: 'Download Story TikTok <span class="text-rose-600">Tanpa Watermark HD</span>',
+    heroSubtitle: 'Simpan story TikTok favorit sebelum kedaluwarsa 24 jam dengan kualitas video HD jernih tanpa login.'
   },
   {
     path: 'viewer',
     title: 'TikTok Web Viewer Tanpa Login Gratis - SaveTok',
     description: 'Jelajahi video dan profil TikTok secara anonim langsung di web browser tanpa login akun.',
-    canonical: 'https://savetok.web.id/viewer'
+    canonical: 'https://savetok.web.id/viewer',
+    heroTitle: 'TikTok Web Viewer <span class="text-rose-600">Tanpa Login Gratis</span>',
+    heroSubtitle: 'Jelajahi video dan profil TikTok secara anonim langsung di web browser tanpa login akun.'
   },
   {
     path: 'panduan',
     title: 'Panduan Lengkap Cara Download Video TikTok - SaveTok',
     description: 'Tutorial lengkap cara menyimpan video, foto slide, dan lagu TikTok tanpa watermark di Android, iPhone, dan PC.',
-    canonical: 'https://savetok.web.id/panduan'
+    canonical: 'https://savetok.web.id/panduan',
+    heroTitle: 'Panduan Lengkap <span class="text-rose-600">Download Video TikTok</span>',
+    heroSubtitle: 'Tutorial lengkap cara menyimpan video, foto slide, dan lagu TikTok tanpa watermark di Android, iPhone, dan PC.'
   },
   {
     path: 'privacy',
     title: 'Kebijakan Privasi - SaveTok',
     description: 'Kebijakan Privasi SaveTok - Layanan download video TikTok yang aman dan menghormati privasi pengguna.',
-    canonical: 'https://savetok.web.id/privacy'
+    canonical: 'https://savetok.web.id/privacy',
+    heroTitle: 'Kebijakan Privasi <span class="text-rose-600">SaveTok</span>',
+    heroSubtitle: 'Kebijakan Privasi SaveTok - Layanan download video TikTok yang aman dan menghormati privasi pengguna.'
   },
   {
     path: 'terms',
     title: 'Syarat & Ketentuan - SaveTok',
     description: 'Syarat dan Ketentuan penggunaan layanan SaveTok downloader online.',
-    canonical: 'https://savetok.web.id/terms'
+    canonical: 'https://savetok.web.id/terms',
+    heroTitle: 'Syarat &amp; Ketentuan <span class="text-rose-600">SaveTok</span>',
+    heroSubtitle: 'Syarat dan Ketentuan resmi penggunaan layanan SaveTok downloader online.'
   },
   {
     path: 'disclaimer',
     title: 'Penafian (Disclaimer) - SaveTok',
     description: 'Penafian resmi mengenai hak cipta dan batasan tanggung jawab penggunaan layanan SaveTok.',
-    canonical: 'https://savetok.web.id/disclaimer'
+    canonical: 'https://savetok.web.id/disclaimer',
+    heroTitle: 'Penafian (Disclaimer) <span class="text-rose-600">SaveTok</span>',
+    heroSubtitle: 'Penafian resmi mengenai hak cipta dan batasan tanggung jawab penggunaan layanan SaveTok.'
   }
 ];
 
@@ -86,6 +102,14 @@ function generateHtml(route) {
   html = html.replace(/<meta\s+name=["']twitter:title["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta name="twitter:title" content="${route.title}" />`);
   html = html.replace(/<meta\s+name=["']twitter:description["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta name="twitter:description" content="${route.description}" />`);
   html = html.replace(/<meta\s+name=["']twitter:url["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta name="twitter:url" content="${route.canonical}" />`);
+
+  // Replace critical hero inside #root
+  if (route.heroTitle) {
+    html = html.replace(/<h1 id="hero-title"[^>]*>[\s\S]*?<\/h1>/i, `<h1 id="hero-title" class="font-sans font-black text-3xl sm:text-5xl md:text-6xl text-slate-900 tracking-tight leading-[1.15]">${route.heroTitle}</h1>`);
+  }
+  if (route.heroSubtitle) {
+    html = html.replace(/<p id="hero-subtitle"[^>]*>[\s\S]*?<\/p>/i, `<p id="hero-subtitle" class="font-sans font-normal text-sm sm:text-base md:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed">${route.heroSubtitle}</p>`);
+  }
 
   return html;
 }

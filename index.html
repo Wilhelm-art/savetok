@@ -231,8 +231,37 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <!-- Single Page Application Mount Root -->
-    <div id="root"></div>
+    <!-- Single Page Application Mount Root with Pre-rendered Critical Hero Shell for Instant FCP & LCP -->
+    <div id="root">
+      <div id="savetok-application-wrapper" class="min-h-screen bg-slate-50/50 text-slate-900 flex flex-col font-sans selection:bg-rose-500/10 selection:text-rose-600">
+        <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 md:px-8 h-18 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-2.5">
+              <span class="w-10 h-10 rounded-2xl bg-linear-to-tr from-rose-500 to-rose-600 flex items-center justify-center text-white font-black text-xl shadow-xs">S</span>
+              <span class="font-black text-2xl tracking-tight text-slate-900">Save<span class="text-rose-600">Tok</span></span>
+            </a>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">ID</span>
+            </div>
+          </div>
+        </header>
+        <div class="h-18 shrink-0"></div>
+        <main class="flex-grow flex flex-col items-center w-full px-4 sm:px-6 md:px-8 py-6 md:py-10 max-w-5xl mx-auto gap-8">
+          <div id="hero-heading-block" class="w-full max-w-3xl text-center flex flex-col gap-3">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold bg-white text-slate-800 border border-slate-200 shadow-2xs mx-auto">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Fast &amp; Unlimited Downloader</span>
+            </div>
+            <h1 id="hero-title" class="font-sans font-black text-3xl sm:text-5xl md:text-6xl text-slate-900 tracking-tight leading-[1.15]">
+              Download Video TikTok <span class="text-rose-600">Tanpa Watermark</span>
+            </h1>
+            <p id="hero-subtitle" class="font-sans font-normal text-sm sm:text-base md:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed">
+              Cepat, gratis, dan kualitas Full HD tanpa tanda air langsung ke galeri perangkat Anda.
+            </p>
+          </div>
+        </main>
+      </div>
+    </div>
 
     <!-- Static crawlable semantic fallback markup for non-JS search bots (contained in noscript to eliminate layout shift) -->
     <noscript>
