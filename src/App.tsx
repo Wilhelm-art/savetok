@@ -713,13 +713,15 @@ export default function App() {
       </AnimatePresence>
 
       {/* Overlay modal document viewer for GDPR/Legal compliance */}
-      <Suspense fallback={null}>
-        <LegalModal
-          type={activeLegal}
-          language={language}
-          onClose={() => setActiveLegal(null)}
-        />
-      </Suspense>
+      {activeLegal && (
+        <Suspense fallback={null}>
+          <LegalModal
+            type={activeLegal}
+            language={language}
+            onClose={() => setActiveLegal(null)}
+          />
+        </Suspense>
+      )}
 
     </div>
   );
